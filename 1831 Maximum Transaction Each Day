@@ -1,0 +1,15 @@
+Method 1 - WINDOW FUNCTION
+
+SELECT transaction_id
+FROM(
+SELECT transaction_id, rank() OVER (PARTITION BY day ORDER BY amount desc) as r
+FROM Transactions) t
+WHERE r=1
+ORDER BY transaction_id
+
+Method 2 - MAX() Function
+
+SELECT transaction_id
+FROM Transactions
+WHERE (day, amount) IN (SELECT day, max(amount) FROM Transactions GROUP BY day)
+ORDER BY transaction_id
