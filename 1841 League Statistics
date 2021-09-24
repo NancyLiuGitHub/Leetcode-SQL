@@ -1,16 +1,37 @@
+CASE WHEN
+
+
+My Solution
 
 SELECT Teams.team_name as team_name, sum(matches_played), sum(points) as points, sum(goal_for), sum(goal_against), sum(goal_for)-sum(goal_against) as goal_diff
 FROM(
 (SELECT home_team_id as id, count(*) as matches_played, sum(home_team_goals) as goal_for, sum(away_team_goals) as goal_against, 
-case (when home_team_goals = away_team_goals then 1 when home_team_goals < away_team_goals then 0 else 3 end) as points
+case when home_team_goals = away_team_goals then 1 when home_team_goals < away_team_goals then 0 else 3 end as points
 FROM Matches
 GROUP BY home_team_id)
 Union 
 (SELECT away_team_id as id, count(*) as matches_played, sum(home_team_goals) as goal_against, sum(away_team_goals) as goal_for,
-case (when home_team_goals = away_team_goals then 1 when home_team_goals < away_team_goals then 3 else 0 end) as points
+case when home_team_goals = away_team_goals then 1 when home_team_goals < away_team_goals then 3 else 0 end as points
 FROM Matches
 GROUP BY away_team_id)
 ) AS t
 join Teams on Teams.team_id = t.id
 GROUP BY Teams.team_name
 Order by points desc, goal_diff desc, team_name
+
+
+Other Solution
+
+SELECT team_name, count(team_name) as matches_played, sum(points) as points, sum(goal_for),sum(goal_against), sum(goal_for)-sum(goal_against) as goal_diff
+FROM (
+  SELECT team_name, 
+  CASE WHEN team_id = home_team_id (
+      CASE WHEN home_team_goals = away_team_goals then 1 WHEN home_team_goals > away_team goals then 3 else 0 END)
+       WHEN team_id = away_team_id (
+      CASE WHEN away_team_goals = home_team_goals then 1 WHEN home_team_goals > away_team goals then 0 else 3 END) END as points,
+  CASE WHEN team_id = home_team_id then home_team_goals else away_team_goals as goal_for,
+  CASE WHEN team_id = away_team_id then home_team_goals else away_team_goals as goal_against
+  FROM Matches join Teams on home_team_id = team_id or away_team_id = team_id
+  ) as tmp
+ GROUP BY 1
+ ORDER BY points desc, goal_diff desc, team_name
