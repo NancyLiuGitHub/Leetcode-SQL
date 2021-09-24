@@ -1,0 +1,4 @@
+Date Format
+
+SELECT concat(format(day, 'dddd'), format(day, 'Mon dd, yyyy'))
+FROM Days
