@@ -8,3 +8,12 @@ FROM Days
 Method 2
 
 SELECT concat(datename(weekday, day), ', ', datename(mm,day), ' ', datename(dd,day), ', ', datename(yyyy,day))
+FROM Days
+
+*Method 3
+
+SELECT concat(dayname(day), ', ', monthname(day), ' ', day(day), ', ', year(day)) 
+FROM Days
+
+*Method 4
+SELECT date_format(day, '%W, %M %e, %Y') FROM Days
