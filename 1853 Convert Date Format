@@ -15,5 +15,5 @@ FROM Days
 SELECT concat(dayname(day), ', ', monthname(day), ' ', day(day), ', ', year(day)) 
 FROM Days
 
-*Method 4
+*Method 4 (works in Athena)
 SELECT date_format(day, '%W, %M %e, %Y') FROM Days
