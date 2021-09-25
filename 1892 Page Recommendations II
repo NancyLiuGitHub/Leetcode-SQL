@@ -1,3 +1,5 @@
+My Original Solution (Wrong)
+
 with cte as (
 SELECT user1_id, page_id, count(*) as firends_likes
 FROM Friendship f join Likes l on user2_id = user_id
@@ -6,3 +8,19 @@ GROUP BY user1_id, page_id)
 SELECT user1_id as user_id, page_id, friends_likes
 FROM cte
 WHERE user1_id, page_id NOT IN (select * from Likes)
+
+
+******************************************************
+Updated Solution
+
+with cte as (
+Select user1_id as user, user2_id as friend
+FROM Friendship
+union
+Select user2_id as user, user1_id as friend
+FROM Friendship)
+
+SELECT user as user_id, page_id, count(*) as friends_likes
+FROM cte join Likes on user = user_id
+WHERE user, page_id NOT IN (select * from Likes)
+GROUP BY user, page_id
