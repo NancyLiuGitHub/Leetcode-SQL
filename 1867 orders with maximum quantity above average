@@ -1,6 +1,13 @@
+My Solution
 SELECT order_id
 FROM (
 SELECT order_id, AVG(quantity) avg_q, MAX(quantity) max_q
 FROM OrdersDetails
 GROUP BY order_id ) tmp
 WHERE max_q > MAX(avg_q)
+
+Other Solution
+SELECT order_id
+FROM OrdersDetails
+GROUP BY order_id
+HAVING MAX(quantity) > all (SELECT AVG(quantity) FROM OrdersDetails GROUP BY order_id)
