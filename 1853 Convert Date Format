@@ -1,19 +1,16 @@
 Date Format
 
-Method 1
-
+Method 1 (Wrong)
 SELECT concat(format(day, 'dddd'), format(day, 'Mon dd, yyyy'))
 FROM Days
 
-Method 2
-
+Method 2 (MS SQL)
 SELECT concat(datename(weekday, day), ', ', datename(mm,day), ' ', datename(dd,day), ', ', datename(yyyy,day))
 FROM Days
 
-*Method 3
-
+*Method 3 (MySQL)
 SELECT concat(dayname(day), ', ', monthname(day), ' ', day(day), ', ', year(day)) 
 FROM Days
 
-*Method 4 (works in Athena)
+*Method 4 (MySQL & Athena)
 SELECT date_format(day, '%W, %M %e, %Y') FROM Days
