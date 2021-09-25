@@ -1,0 +1,13 @@
+Consecutive Months
+
+with tmp as (
+SELECT account_id, sum(amount) total , month(day) month
+FROM Transactions
+WHERE type = 'Creditor'
+GROUP BY account_id, month(day)
+)
+
+SELECT distinct(a.account_id)
+FROM tmp t1 join tmp t2 on t1.account_id = t2.account_id and t1.month + 1 = t2.month
+join Transaction s on t1.account_id = s.account_id
+WHERE t1.total > s.max_income and t2.total > s.max_income
