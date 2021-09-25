@@ -1,3 +1,4 @@
 SELECT employee_id, name, salary, dense_rank() OVER (Order By salary desc) as team_id
 FROM Employees
 WHERE salary not in (SELECT salary FROM Employees GROUP BY salary HAVING COUNT(*) = 1)
+ORDER BY team_id, employee_id
