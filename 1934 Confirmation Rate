@@ -1,0 +1,3 @@
+SELECT user_id, ifnull(round(SUM(CASE WHEN action = 'confirmed' then 1 else 0 end)/COUNT(*),2),0.00) as confirmation_rate 
+FROM Signups s left join Confirmations c on s.user_id = c.user_id
+GROUP BY s.user_id
