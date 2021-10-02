@@ -1,10 +1,47 @@
 with cte as (
 SELECT CASE WHEN income < 20000 THEN 'Low Salary' 
 WHEN income <= 50000 and income >= 20000 THEN 'Average Salary'
-WHEN income > 50000 THEN 'High Salary'
+WHEN income > 50000 THEN 'High Salary' END
 as category, account_id
 from Accounts)
 
 SELECT category, count(account_id)
 from cte
 group by category
+
+
+Update
+problem: Doesn't consider 0
+how to add 0
+
+Solution 1
+1)create a empty table with 3 catergories 2)apply group by on the account table 3)join 
+
+With cte as (
+SELECT 'Low Salary' category
+union
+SELECT 'Average Salary' category
+union
+SELECT 'High Salary' category
+)
+
+with agg_acct (
+SELECT CASE WHEN income < 20000 THEN 'Low Salary' 
+WHEN income > 50000 THEN 'High Salary'
+ELSE  'Average Salary' END as category,
+count(account_id)
+from Accounts
+group by 1
+
+SELECT category, ifnull(cnt, 0)
+from cte left join FROM agg_acct a 
+on cte.category = a.category
+
+
+Solution 2
+select "Low Salary" as category, ifnull(count(*), 0) as accounts_count from Accounts where income < 20000
+union 
+select "Average Salary" as category, ifnull(count(*),0) as accounts_count from Accounts where 20000 <= income and income <= 50000
+union
+select "High Salary" as category, ifnull(count(*),0) as accounts_count from Accounts where 50000 < income
+
