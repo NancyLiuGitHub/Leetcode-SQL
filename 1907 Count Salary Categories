@@ -1,0 +1,10 @@
+with cte as (
+SELECT CASE WHEN income < 20000 THEN 'Low Salary' 
+WHEN income <= 50000 and income >= 20000 THEN 'Average Salary'
+WHEN income > 50000 THEN 'High Salary'
+as category, account_id
+from Accounts)
+
+SELECT category, count(account_id)
+from cte
+group by category
