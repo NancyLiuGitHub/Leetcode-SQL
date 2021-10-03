@@ -1,3 +1,4 @@
 SELECT distint user1_id, user2_id, count(f2.user2_id) as common_friend
 FROM Friendship f1 join Friendship f2 on f1.user2_id = f2.user1_id
 GROUP BY 1,2
+HAVING COUNT(f2.user2_id) >= 3
