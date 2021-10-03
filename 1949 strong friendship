@@ -1,4 +1,21 @@
+MY SOLUTION (WRONG)
 SELECT distint user1_id, user2_id, count(f2.user2_id) as common_friend
 FROM Friendship f1 join Friendship f2 on f1.user2_id = f2.user1_id
 GROUP BY 1,2
 HAVING COUNT(f2.user2_id) >= 3
+
+
+OTHER SOLUTION
+with cte as (
+SELECT user1_id as user, user2_id as friend
+FROM friendship
+union
+SELECT user2_id as user, user1_id as friend
+FROM friendship
+)
+
+Select f1.user, f2.user, count(f1.friend) as common_friend
+from cte c1 join cte c2 on c1.friend and c2.friend and c1.user<c2.user
+where (c1.user, c2.user) in (select * from friendship)
+group by 1,2
+having count(f1.friend) >= 3
