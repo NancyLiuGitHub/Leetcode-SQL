@@ -1,3 +1,5 @@
+MY SOLUTION
+
 SELECT e.employee_id
 FROM Employees e FULL OUTER JOIN Salaries s ON e.employee_id = s.employee_id
 WHERE s.salary is null
@@ -5,3 +7,15 @@ union
 SELECT s.employee_id
 FROM Employees e FULL OUTER JOIN Salaries s ON e.employee_id = s.employee_id
 WHERE e.name is null
+
+
+
+OTHER SOLUTION
+
+SELECT employee_id
+FROM (SELECT employee_id FROM Employees
+      union all
+      SELECT employee_id FROM Salaries) tmp
+GROUP BY 1
+HAVING COUNT(*) = 1
+ORDER BY 1
