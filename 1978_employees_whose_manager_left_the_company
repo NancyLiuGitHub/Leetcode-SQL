@@ -1,4 +1,20 @@
 SELECT employee_id
 FROM Employees
 WHERE salary < 3000 and manager_id not in (select employee_id from Employees)
-and manager_id is not null (?)
+and manager_id is not null (?) -> can be deleted
+
+A: select 'true' where 3 in (1, 2, 3, null)
+B: select 'true' where 3 not in (1, 2, null)
+C: select 'true' where null not in (1,2)
+
+A means: select 'true' where 3 = 1 or 3 = 2 or 3 = 3 or 3 = null
+          FALSE or FALSE or TRUE or UNKNOWN
+          -> TRUE
+          ->return true
+B means: select 'true' where 3 <> 1 and 3 <> 2 and 3 <> null
+          TRUE and TRUE and UNKNOWN
+          -> UNKNOWN
+          ->return nothing
+C means: select 'ture' where null <> 1 and null <>2
+          UNKNOWN and UNKNOWN
+          ->return nothing
