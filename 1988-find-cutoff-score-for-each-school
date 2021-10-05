@@ -1,0 +1,16 @@
+MY SOLUTION
+METHOD1
+with cte as (
+  SELECT *, rank() OVER (ORDER BY score desc) as r
+  FROM schools, exam
+  WEHERE capacity > student_count
+ )
+ 
+ SELECT school_id, ifnull(score,0)
+ FROM school s left join cte c on s.school_id = c.school_id
+ WHERE r = 1
+ 
+ 
+ METHOD2
+ SELECT school_id, if(capacity > student_count, then min(score), -1) as score
+ FROM school, exam
