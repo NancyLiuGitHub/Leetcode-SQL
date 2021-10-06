@@ -1,9 +1,24 @@
+MY SOLUTION
+
 SELECT activity_date, count(user_id)
 FROM traffic
 WHERE (user_id, activity_date) IN (
 SELECT user_id, min(activity_date)
 FROM traffiic
+WHERE activity = 'login'
 GROUP BY user_id
-HAVING min(activity_date)> date_sub("2019-06-30", interval 90 days)
+HAVING min(activity_date)> date_sub("2019-06-30", interval 90 day)
 )
 GROUP BY activity_date
+
+
+OTHER SOLUTION
+
+SELECT login_date, count(*) as user_count
+FROM (SELECT user_id, min(activity_date)
+FROM traffiic
+WHERE activity = 'login'
+GROUP BY user_id) t
+where login_date >= date_add('2019-06-30', interval -90 day) and login_date <= '2019-06-30'
+# where datediff('2019-06-30', login_date) <= 90
+group by login_date
