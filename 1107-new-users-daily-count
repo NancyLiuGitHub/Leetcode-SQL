@@ -1,0 +1,9 @@
+SELECT activity_date, count(user_id)
+FROM traffic
+WHERE (user_id, activity_date) IN (
+SELECT user_id, min(activity_date)
+FROM traffiic
+GROUP BY user_id
+HAVING min(activity_date)> date_sub("2019-06-30", interval 90 days)
+)
+GROUP BY activity_date
