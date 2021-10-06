@@ -1,3 +1,5 @@
+MY SOLUTION
+
 SELECT extra as report_reason, count(distinct post_id) as report_count
 FROM actions
 WEHERE extra is not null 
@@ -6,3 +8,12 @@ and action_date = '2019-07-05'
 # or action_date = date_add('2019-07-05', interval -1 day)
 GROUP BY report_reason
 Having count(disctinct post_id) > 0
+
+
+OTHER SOLUTION (no need to deal with null and 0 value??)
+
+SELECT extra as report_reason, count(distinct post_id) as report_count
+FROM actions
+WEHERE action = 'report' and action_date = '2019-07-05'
+GROUP BY report_reason
+
