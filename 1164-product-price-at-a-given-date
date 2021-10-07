@@ -7,4 +7,19 @@ WHERE change_date <= '2019-08-16'
 SELECT p.product_id, ifnull(cte.new_price, 10) as price
 FROM (select distinct product_id from products) p 
 left join cte c on p.product_id = cte.product_id
-WHERE r = 1
+WHERE r = 1 or r is null
+
+METHOD 2 (NO WINDOW FUNCTION)
+
+SELECT product_id, 10 as price
+FROM products
+WHERE product_id NOT IN (SELECT product_id FROM products WHERE change_date <= '2019-08-16')
+UNION
+SELECT product_id, new_price as price
+FROM products
+WHERE (product_id, change_date) IN  
+  (SELECT product_id, max(change_date) 
+  FROM products 
+  WHERE change_date <= '2019-08-16'
+  GROUP BY product_id)
+
