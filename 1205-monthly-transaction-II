@@ -1,0 +1,13 @@
+SELECT 
+month,
+country,
+sum(if(state = 'approved', 1,0) as approved_count,
+sum(case when state = 'approved' then amount else 0 end) as approved_amount,
+sum(if(trans_date is not null, 1, 0) as chargeback_count,
+sum(case when trans_date is not null then amount else 0 end) as chargeback_amount
+FROM transactions t left join chargebacks c on t.id = c.trans_id
+Group by month, country
+Having sum(if(state = 'approved', 1,0) != 0
+  and sum(case when state = 'approved' then amount else 0 end) != 0
+  and sum(if(trans_date is not null, 1, 0) != 0
+  and sum(case when trans_date is not null then amount else 0 end) != 0
