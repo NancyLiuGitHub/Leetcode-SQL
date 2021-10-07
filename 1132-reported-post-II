@@ -1,0 +1,12 @@
+with t1 as(
+SELECT action_date, count(distinct post_id) as spam FROM actions 
+WHERE extra = 'spam'
+GROUP BY action_date )
+
+with t2 as (
+SELECT action_date, count(disctinct post_id) as remove FROM actions
+WHERE post_id IN (Select post_id from removals) and extra = 'spam')
+
+select avg(round(spam-ifnull(remove,0))/spam,2))
+from t1 left join t2 on t1.action_date = t2.action_date
+
