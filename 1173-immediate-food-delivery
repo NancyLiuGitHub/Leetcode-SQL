@@ -1,0 +1,5 @@
+select round(sum(case when order_date = customer_pref_delivery_date then 1 else 0 end))/count(delivery_id),2) *100
+from delivery
+
+select round(sum(if(order_date = customer_pref_delivery_date, 1, 0))/count(delivery_id),2) *100
+from delivery
