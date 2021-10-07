@@ -1,0 +1,5 @@
+SELECT distinct viewer_id as id
+FROM views
+GROUP BY view_date, viewer_id
+HAVING COUNT(distinct article_id) >= 2
+ORDER BY viewer_id
