@@ -10,7 +10,7 @@ WHERE (seller_id, order_date) NOT IN (
 GROUP BY seller_id, item_id
 )
 
-SELECT seller_id, CASE WHEN cte.item_id is null THEN 'no' WHEN item_band = favorite_band THEN 'yes' ELSE 'no' as 2nd_item_fav_brand
+SELECT seller_id, CASE WHEN cte.item_id is null THEN 'no' WHEN item_band = favorite_band THEN 'yes' ELSE 'no' END as 2nd_item_fav_brand
 From cte 
   join items on cte.item_id = items.item_id
   right join users on cte.seller_id = users.user_id
@@ -26,3 +26,18 @@ SELECT seller_id, CASE WHEN r = 2 and item_band = favorite_band THEN 'yes' else 
 From cte 
   join items on cte.item_id = items.item_id
   right join users on cte.seller_id = users.user_id
+
+
+OTHER SOLUTION
+select u.user_id as seller_id, 
+    case when u.favorite_brand = b.item_brand then 'yes' else 'no' end as 2nd_item_fav_brand 
+from users u
+left join 
+    (select seller_id, a.item_id, r, item_brand
+    from (select *, row_number() over (partition by seller_id order by order_date) as r
+         from orders) a 
+    join items i
+    on a.item_id = i.item_id
+    where r = 2) b 
+on u.user_id = b.seller_id;
+
