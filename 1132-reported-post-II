@@ -1,3 +1,5 @@
+My SOLUTION
+
 with t1 as(
 SELECT action_date, count(distinct post_id) as spam FROM actions 
 WHERE extra = 'spam'
@@ -7,6 +9,16 @@ with t2 as (
 SELECT action_date, count(disctinct post_id) as remove FROM actions
 WHERE post_id IN (Select post_id from removals) and extra = 'spam')
 
-select avg(round(spam-ifnull(remove,0))/spam,2))
+select avg(round((spam-ifnull(remove,0))/spam,2))
 from t1 left join t2 on t1.action_date = t2.action_date
 
+
+OTHER SOLUTION
+select round(avg(daily_count), 2) as average_daily_percent
+from (select count(distinct r.post_id)/count(distinct a.post_id)*100 as daily_count
+    from actions a
+    left join removals r
+    on a.post_id = r.post_id
+    where extra = 'spam'
+    group by action_date
+    ) tmp
