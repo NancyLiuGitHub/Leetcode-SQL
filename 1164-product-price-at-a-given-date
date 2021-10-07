@@ -1,0 +1,10 @@
+WITH cte as (
+SELECT *, RANK() OVER (PARTITION BY product_id ORDER BY change_date desc) as r
+FROM products
+WHERE change_date <= '2019-08-16'
+)
+
+SELECT p.product_id, ifnull(cte.new_price, 10) as price
+FROM (select distinct product_id from products) p 
+left join cte c on p.product_id = cte.product_id
+WHERE r = 1
