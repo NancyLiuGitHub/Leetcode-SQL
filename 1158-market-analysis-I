@@ -1,0 +1,4 @@
+SELECT user_id, join_date, coalesce(count(order_id),0)
+FROM users u left join orders o on u.user_id = o.buyer_id
+WHERE year(order_date) = 2019
+GROUP BY buyer_id, join_date
