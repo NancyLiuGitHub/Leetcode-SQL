@@ -1,0 +1,6 @@
+SELECT ROUND(AVG(*),2) as average_sessions_per_user
+FROM (
+  SELECT count(distinct session_id)
+  FROM activity
+  WHERE DATEDIFF(day, activity_date, '2019-07-27')<30
+  GROUP BY user_id) tmp
