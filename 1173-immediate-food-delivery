@@ -1,5 +1,12 @@
-select round(sum(case when order_date = customer_pref_delivery_date then 1 else 0 end))/count(delivery_id),2) *100
+select round(sum(case when order_date = customer_pref_delivery_date then 1 else 0 end))/count(delivery_id),4) *100
 from delivery
 
-select round(sum(if(order_date = customer_pref_delivery_date, 1, 0))/count(delivery_id),2) *100
+select round(sum(if(order_date = customer_pref_delivery_date, 1, 0))/count(delivery_id),4) *100
 from delivery
+
+OTHER SOLUTION
+select round(sum(order_date = customer_pref_delivery_date)/count(*),4) *100
+from delivery
+
+select round(select count(*) from delivery where order_date = customer_pref_delivery_date) /
+(select count(*) from delivery), 4 ) * 100
