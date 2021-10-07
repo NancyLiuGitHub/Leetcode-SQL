@@ -1,0 +1,28 @@
+find the second item
+method 1
+with cte as (
+SELECT seller_id, item_id, min(order_date)
+From orders
+WHERE (seller_id, order_date) NOT IN (
+  SELECT seller_id, min(order_date)
+  FROM orders
+  Group by seller_id)
+GROUP BY seller_id, item_id
+)
+
+SELECT seller_id, CASE WHEN cte.item_id is null THEN 'no' WHEN item_band = favorite_band THEN 'yes' ELSE 'no' as 2nd_item_fav_brand
+From cte 
+  join items on cte.item_id = items.item_id
+  right join users on cte.seller_id = users.user_id
+
+
+method 2
+with cte as (
+SELECT seller_id, item_id, rank() OVER (Partition by seller_id OVER by order_date) as r
+FROM orders
+)
+
+SELECT seller_id, CASE WHEN r = 2 and item_band = favorite_band THEN 'yes' else 'no' as 2nd_item_fav_brand
+From cte 
+  join items on cte.item_id = items.item_id
+  right join users on cte.seller_id = users.user_id
