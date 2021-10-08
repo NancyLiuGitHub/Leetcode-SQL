@@ -1,7 +1,13 @@
-SELECT e.employee, t.team_size
+SELECT e.employee_id, t.team_size
 FROM employee e
 left join (
 SELECT team_id, count(employee_id) as team_size
 FROM employee
 GROUP BY team_id) t
 on e.team_id = t.team_id
+
+
+OTHER SOLUTION (simplier)
+SELECT e1.employee_id, count(e2.employee_id)
+FROM employee e1 left join employee e2 on e1.team_id = e2.team_id
+GROUP BY e1.employee_id
