@@ -4,6 +4,13 @@ FROM submission s left join (
   FROM submission
   GROUP BY parent_id ) t
 on s.sub_id = t.parent_id
+WHERE s.parent_id IS NULL
 
 or
 coalesc(num,0)
+
+OTHER SOLUTION
+SELECT s1.sub_id, count(distinct s2.sub_id) as number_of_comments
+FROM submission s1 left join submission s2 on s1.sub_id = s2.parent_id
+WHERE s1.parent_id IS NULL
+GROUP BY s1.sub_id
