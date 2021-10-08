@@ -9,3 +9,27 @@ SELECT guest_team as host, host_team as guest, host_goals as othergoal, guest_go
 FROM matches ) t 
 on t.host = teams.team_id
 GROUP BY team_id, team_name
+
+
+OTHER'S SOLUTION
+select t.team_id, t.team_name,
+    ifnull(sum(case when t.team_id = m.host_team and m.host_goals > m.guest_goals then 3
+    when t.team_id = m.host_team and m.host_goals = m.guest_goals then 1
+    when t.team_id = m.guest_team and m.host_goals < m.guest_goals then 3
+    when t.team_id = m.guest_team and m.host_goals = m.guest_goals then 1
+    else 0 end), 0) as num_points
+from teams t left join matches m
+on m.host_team = t.team_id or m.guest_team = t.team_id
+group by team_id, team_name
+order by num_points desc, team_id
+
+SELECT team_id, team_name,
+  ifnull(
+  sum(case when host_goals = guest_goals then 1
+  when t.team_id = m.host_name and m.host_goals > m.guest_goals then 3
+  when t.team_id = m.guest_name and m.guest_goals > m.host_goals then 3
+  else 0 end
+  ,0) as num_points
+FROM teams t left join matches m
+on t.team_id = m.host_name or t.team_id = m.guest_name
+GROUP BY team_id, team_name
