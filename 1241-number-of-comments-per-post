@@ -1,0 +1,9 @@
+SELECT distinct sub_id, ifnull(num,0) as number_of_comments
+FROM submission s left join (
+  SELECT parent_id, count(distinct sub_id) as num
+  FROM submission
+  GROUP BY parent_id ) t
+on s.sub_id = t.parent_id
+
+or
+coalesc(num,0)
