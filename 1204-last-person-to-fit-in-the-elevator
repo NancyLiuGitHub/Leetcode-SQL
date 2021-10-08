@@ -8,3 +8,12 @@ where turn = (
   Having sum(q2.weight)<=1000
   order by q1.turn desc
   limit 1)
+
+
+or inner join
+from queue q1 join queue q2 on q1.turn >= q2.turn
+
+or window funtion
+select *, sum(weight) over (order by turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total
+# ROWS UNBOUNDED PRECEDING
+# Simpliest sum(weight) over (order by turn) AS running total
