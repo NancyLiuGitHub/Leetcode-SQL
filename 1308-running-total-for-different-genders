@@ -1,0 +1,20 @@
+window function
+SELECT gender, day, sum(score_points) over (partition by gender over by day) as total
+FROM scores
+
+join
+SELECT s1.gender, s1.day, sum(s2.score_points)
+FROM scores s1 left join scores s2 on s1.day >= s2.day
+GROUP BY s1.gender, s1.day
+
+
+subquery
+select s1.gender, s1.day, (select sum(score_points) 
+                          from scores s2 where s1.day >= s2.day)
+from scores s1
+where gender = 'F'
+UNION ALL
+select s1.gender, s1.day, (select sum(score_points)
+                           from scores s2 where s1.day >= s2.day)
+from scores s1
+where gender = 'M'
