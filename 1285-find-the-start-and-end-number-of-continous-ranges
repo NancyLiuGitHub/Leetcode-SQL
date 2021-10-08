@@ -1,0 +1,12 @@
+with cte as (
+SELECT *
+FROM (
+SELECT log_id, ROW() as r
+FROM logs
+ORDER BY log_id ) t1
+left join logs t2 on t1.log_id + 1  = t2.log_id)
+
+SELECT 
+(case when r=1 or r IN (select r+1 from cte where t2.log_id is null) then t1.log_id end) as start_id,
+(case when r IN (select r from cte where t2.log is null) then t1.log_id end) as end_id
+FROM cte
