@@ -2,7 +2,7 @@ SELECT distinct employee_id
 FROM employees e1 
 join employees e2 on e1.manager_id = e2.employee_id
 join employees e3 on e2.manager_id = e3.employee_id
-WHERE e3.manager = 1
+WHERE e3.manager = 1 and employee_id != 1
 
 SELECT distinct employee_id
 FROM employees
@@ -14,3 +14,4 @@ WHERE manager_id IN
     from employees
     where manager_id = 1)
     )
+ and employee_id != 1
