@@ -1,3 +1,3 @@
 SELECT query_name, round(avg(rating/position),2) as quality, round(100 * sum(if(rating<3,1,0))/count(*),2) as poor_query_percentage
-FROM queries
+FROM (select distinct * from queries) # remove duplicated rows
 GROUP BY query_name
