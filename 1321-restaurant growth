@@ -2,16 +2,26 @@ window function
 SELECT 
 visited_on, 
 sum(amount) over (order by visited_on ranges between 6 preceding rows and current rows) as amount,
-avg(amount) over (order by visited_on ranges between 6 preceding rows and current rows) as amount
-FROM customer
-WHERE date_sub(visited_on, 6 day) >= (SELECT min(visited) FROM customer)
+avg(amount) over (order by visited_on ranges between 6 preceding rows and current rows) as avg_amount
+FROM (select visited_on, sum(amount) from customer group by visited_on) t
+WHERE date_sub(visited_on, inteval 6 day) >= (SELECT min(visited) FROM customer)
 
 subquery
-SELECT visited_on, (select sum(amount) 
+with cte as
+(SELECT visited_on, sum(amount) as amount
+FROM customer_id
+GROUP BY visited_on)
+
+SELECT c1.visited_on, (select sum(amount) 
                     from customer c2
-                    where date_diff(c1.visited_on, c2.visited_on) <= 6)
-FROM customer c1
-WHERE date_sub(visited_on, 6 day) >= (SELECT min(visited) FROM customer)
+                    where datediff(c1.visited_on, c2.visited_on) <= 6
+                      and c1.visited_on >= c2.visited_on) as amount,
+                      (select avg(amount) 
+                    from cte c2
+                    where datediff(c1.visited_on, c2.visited_on) <= 6
+                      and c1.visited_on >= c2.visited_on) as avg_amount
+FROM cte c1
+WHERE date_sub(visited_on, interval 6 day) >= (SELECT min(visited) FROM customer)
 
 join
 with cte as
