@@ -1,3 +1,4 @@
+(wrong)
 SELECT 
 date_format(trans_date, "%Y-%m") as month,
 country,
@@ -12,7 +13,7 @@ Having sum(if(state = 'approved', 1,0) != 0
   and sum(if(trans_date is not null, 1, 0) != 0
   and sum(case when trans_date is not null then amount else 0 end) != 0
 
-
+(correct)
 SELECT 
 date_format(trans_date, "%Y-%m") as month,
 country,
@@ -24,3 +25,7 @@ FROM (SELECT * FROM transaction WHERE state = 'approved'
       union
       SELECT trans_id as id, t.country, 'charge' as state, t.amount, c.trans_date FROM chargebacks c left join transaction t on c.trans_id = t.id) t
 GROUP BY date_format(trans_date, "%Y-%m"), country
+
+
+OTHER'S SOLUTION
+use union all instead of union
