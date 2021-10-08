@@ -1,7 +1,9 @@
+WRONG ANSWER
+
 with cte as (
 SELECT *
 FROM (
-SELECT log_id, ROW() as r
+SELECT log_id, ROW_NUMBER() over () as r
 FROM logs
 ORDER BY log_id ) t1
 left join logs t2 on t1.log_id + 1  = t2.log_id)
@@ -10,3 +12,32 @@ SELECT
 (case when r=1 or r IN (select r+1 from cte where t2.log_id is null) then t1.log_id end) as start_id,
 (case when r IN (select r from cte where t2.log is null) then t1.log_id end) as end_id
 FROM cte
+
+
+OTHER'S SOLUTION
+1) window function and group by
+select min(log_id) as start_id, max(log_id) as end_id
+from (select l.log_id, (l.log_id - l.row_num) as diff
+      from (select log_id, row_number() over() as row_num from Logs) l
+      ) l2
+group by diff
+
+
+2) window function no group by
+WITH tmp AS (SELECT log_id, (log_id - ROW_NUMBER() OVER(ORDER BY log_id)) AS diff FROM Logs)
+SELECT DISTINCT
+FIRST_VALUE(log_id) OVER(PARTITION BY diff ORDER BY log_id) AS start_id,
+FIRST_VALUE(log_id) OVER(PARTITION BY diff ORDER BY log_id DESC) AS end_id
+FROM tmp
+ORDER BY start_id;
+
+3) windown function and join
+SELECT start_id, end_id
+FROM 
+  (select l1.log_id as start, row() over(order by log_id) as r 
+  from logs l1 left join logs l2 on l1.log_id - 1 = l2.log_id where l2.log_id is null) cte1
+join 
+  (select l1.log_id as start, row() over(order by log_id) as r 
+  from logs l1 left join logs l2 on l1.log_id + 1 = l2.log_id where l2.log_id is null) cte2
+on cte1.r = cte2.r
+
