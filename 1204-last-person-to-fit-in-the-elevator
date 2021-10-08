@@ -1,0 +1,10 @@
+select person_name
+from queue
+where turn = (
+  select q1.turn
+  from queue q1, queue q2
+  where q1.turn >= q2.turn
+  group by q1.turn
+  Having sum(q2.weight)<=1000
+  order by q1.turn desc
+  limit 1)
