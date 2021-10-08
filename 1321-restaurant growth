@@ -1,0 +1,27 @@
+window function
+SELECT 
+visited_on, 
+sum(amount) over (order by visited_on ranges between 6 preceding rows and current rows) as amount,
+avg(amount) over (order by visited_on ranges between 6 preceding rows and current rows) as amount
+FROM customer
+WHERE date_sub(visited_on, 6 day) >= (SELECT min(visited) FROM customer)
+
+subquery
+SELECT visited_on, (select sum(amount) 
+                    from customer c2
+                    where date_diff(c1.visited_on, c2.visited_on) <= 6)
+FROM customer c1
+WHERE date_sub(visited_on, 6 day) >= (SELECT min(visited) FROM customer)
+
+join
+with cte as
+(SELECT visited_on, sum(amount) as amount
+FROM customer_id
+GROUP BY visited_on)
+
+SELECT c1.visited_on, sum(c2.amount), round(avg(c2.amount),2)
+FROM cte c1 left join cte c2
+  on c2.visited_on >= date_sub(c1.visited_on, interval 6 day) and c2.visited_on <= c1.visited_on
+GROUP BY c1.visited_on
+HAVING count(c2.visited_on) >= 7
+order by c1.visited_on
