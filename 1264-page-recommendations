@@ -11,3 +11,17 @@ SELECT distinct l.page
 FROM friendship f left join likes l on f.user1_id = l.user_id or f.user2_id = l.user_id
 WHERE (user2_id = 1 or user1_id = 1)
 and l.page != (select page_id from likes where user_id = 1)
+
+
+OTHER'S SOLUTION
+SELECT DISTINCT b.page_id AS recommended_page FROM (
+SELECT user2_id AS user_id FROM friendship
+WHERE user1_id = 1
+UNION
+SELECT user1_id AS user_id FROM friendship
+WHERE user2_id = 1
+) AS a
+JOIN likes AS b
+ON a.user_id = b.user_id
+AND b.page_id NOT IN (SELECT page_id FROM likes WHERE user_id = 1)
+ORDER BY b.page_id;
