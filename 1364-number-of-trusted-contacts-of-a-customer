@@ -26,3 +26,7 @@ FROM invoice i
   left join contacts tb2 on i.user_id = tb2.user_id
   left join customers cs on i.user_id = cs.customer_id
 GROUP BY invoice_id, customer_name, price
+
+
+OTHER SOLUTION
+https://circlecoder.com/number-of-trusted-contacts-of-a-customer/
