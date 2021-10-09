@@ -1,0 +1,28 @@
+1)
+with tb1 as (
+SELECT customer_id, customer_name, count(contact_name) as cnt
+FROM customer cs left join contacts ct on cs.customer_id = ct.user_id
+GROUP BY customer_id, customer_name
+)
+with tb2 as (
+select user_id, count(contact_name) as cnt
+from contacts
+WHERE contact_name in (select customer_name from customers)
+GROUP BY user_id
+)
+
+
+SELECT invoice_id, c.customer_name, price, tb1.cnt as contacts_cnt, ifnull(tb2.cnt,0) as trusted_contacts_cnt
+FROM invoices i 
+  left join tb1 on i.user_id = tb1.customer_id
+  left join tb2 on i.user_id = tb2.user_id
+ORDER BY invoice_id
+
+
+2)
+SELECT invoice_id, customer_name, price, count(tb2.contact_name) as contacts_cnt, count(tb1.contact_name) as trusted_contacts_cnt
+FROM invoice i
+  left join (SELECT user_id, contact_name FROM contacts where contact name in (select customer_name from customers)) tb1 on i.user_id = tb1.user_id
+  left join contacts tb2 on i.user_id = tb2.user_id
+  left join customers cs on i.user_id = cs.customer_id
+GROUP BY invoice_id, customer_name, price
