@@ -1,0 +1,9 @@
+SELECT bin, count(session_id) as total
+FROM
+(SELECT session_id, 
+  (case when duration >= 0 and duration < 300 then '[0-5>'
+      when duration >=300 and duration <600 then '[5-10>'
+      when duration >=600 and duration <900 then '[10-15>'
+      when duration >=900 then '15 minutes and more' end) as bin
+FROM session) t
+GROUP BY bin
