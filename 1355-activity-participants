@@ -6,3 +6,28 @@ WHERE name IN (SELECT activity
               HAVING count(id)>1
               ORDER BY count(id) desc
               OFFSET 1)
+
+OTHER SOLUTION
+1)
+select activity
+from friends
+group by activities
+having count(id) != (select count(id) from friends GROUP BY activity ORDER BY count(id) desc limit 1
+and count(id) != (select count(id) from friends GROUP BY activity ORDER BY count(id) limit 1
+
+
+2)window function
+https://zhuanlan.zhihu.com/p/162618480
+with tb1 as
+(select activity, count(name) as cnt
+from friends
+group by activity),
+
+tb2 as (select activity,
+rank() over(order by cnt) as minimum,
+rank() over(order by cnt desc) as maximum
+from tb1)
+
+select activity
+from tb2
+where maximum != 1 and minimum != 1
