@@ -1,0 +1,8 @@
+SELECT stock_name, a.price - b.price as captial_gain_loss
+FROM (select stock_name, sum(price) from stocks where operation = 'buy' group by stock_name) t1
+join (select stock_name, sum(price) from stocks where operation ='sell' group by stock_name) t2
+on t1.stock_name = t2.stock_name
+
+SELECT stock_name, sum(case when operation = 'buy' then price else 0 end) - sum(case when operation = 'sell' then price else 0 end)) as capital_gain_loss
+FROM stocks
+GROUP BY stock_name
