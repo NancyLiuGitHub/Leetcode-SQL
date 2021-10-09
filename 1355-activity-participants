@@ -1,3 +1,5 @@
+SQL question: https://circlecoder.com/activity-participants/
+
 SELECT a.name
 FROM activities
 WHERE name IN (SELECT activity
@@ -31,3 +33,5 @@ from tb1)
 select activity
 from tb2
 where maximum != 1 and minimum != 1
+
+
