@@ -30,5 +30,12 @@ GROUP BY invoice_id, customer_name, price
 
 OTHER SOLUTION
 1)https://circlecoder.com/number-of-trusted-contacts-of-a-customer/
-2)CASE WHEN ... IN (SELECT ...) THEN ...END
-https://zhuanlan.zhihu.com/p/263490392 
+2) CASE WHEN ... IN (SELECT ... FROM ...) THEN ...END
+SELECT invoice_id, customer_name, 
+count(contact_name),
+sum(case when contact_name in (select customer_name from customers) then 1 else 0 end) as cnt
+FROM invoices i
+  left join customers cs on i.user_id = cs.customer_id
+  left join contacts ct on cs.customer_id = ct.user_id
+GROUP BY invoice_id, customer_name
+ORDER BY invoice_id
