@@ -1,13 +1,14 @@
-SELECT name as results
+(SELECT name as results
 FROM movie_rating m join users u on m.user_id = u.user_id
 GROUP BY m.user_id, u.name
 ORDER BY COUNT(movie_id) desc, user_id
-LIMIT 1
+LIMIT 1)
 
-UNION
+UNION ALL
 
-SELECT title as results
+(SELECT title as results
 FROM movie_rating mr join movies m on mr.movie_id = m.movie_id
+WHERE left(created_at,7) = '2020-02'
 GROUP BY mr.movie_id, title
 ORDER BY avg(rating) desc, title
-LIMIT 1
+LIMIT 1)
