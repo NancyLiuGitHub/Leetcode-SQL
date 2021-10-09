@@ -2,3 +2,5 @@ SELECT u.name, ifnull(sum(r.distance),0) as travelled_distance
 FROM users u left join rides r on u.id = r.user_id
 GROUP BY u.id, u.name
 ORDER BY travelled_distance desc, name
+
+sum() return null if null value exists
