@@ -29,4 +29,6 @@ GROUP BY invoice_id, customer_name, price
 
 
 OTHER SOLUTION
-https://circlecoder.com/number-of-trusted-contacts-of-a-customer/
+1)https://circlecoder.com/number-of-trusted-contacts-of-a-customer/
+2)CASE WHEN ... IN (SELECT ...) THEN ...END
+https://zhuanlan.zhihu.com/p/263490392 
