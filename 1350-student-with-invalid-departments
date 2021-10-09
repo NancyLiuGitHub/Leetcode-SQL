@@ -1,3 +1,20 @@
 SELECT distinct s.id, s.name
 FROM students s left join department d on s.department_id = d.id
 WHERE d.name is null
+
+
+OTHER SOLUTION (faster)
+
+1)subquery
+SELECT distinct id, name
+FROM student s
+WHERE NOT EXISTS 
+  (SELECT NULL
+  FROM department d
+  WHERE s.id = s.department_id)
+  
+ 
+2) NOT IN
+SELECT id,name
+FROM students
+WHERE department_id NOT IN (SELECT id FROM department)
