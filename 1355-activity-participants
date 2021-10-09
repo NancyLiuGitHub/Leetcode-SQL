@@ -1,0 +1,8 @@
+SELECT a.name
+FROM activities
+WHERE name IN (SELECT activity
+              FROM friends
+              GROUP BY activity
+              HAVING count(id)>1
+              ORDER BY count(id) desc
+              OFFSET 1)
