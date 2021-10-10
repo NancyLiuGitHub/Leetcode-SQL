@@ -1,0 +1,8 @@
+SELECT o.name, t.customer_id, order_id, order_date
+FROM (
+  SELECT *, rank() OVER (PARTITION BY customer_id ORDER BY order_date desc) as r
+  FROM orders
+  ) t
+  join customers on t.customer_id = c.customer_id
+WHERE r < 4
+ORDER BY c.name, c.customer_id, order_date desc
