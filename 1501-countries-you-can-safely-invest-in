@@ -11,7 +11,7 @@ with cte as (
 )
 
 
-SELECT c.name, AVG(duration)
+SELECT c.name
 FROM cte
 GROUP BY c.name
-HAVING AVG(duration)> (SELECT AVG(duration) FROM cte
+HAVING AVG(duration)> (SELECT AVG(duration) FROM calls
