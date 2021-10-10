@@ -1,0 +1,6 @@
+SELECT o.customer_id, c.name
+FROM orders o join product p on o.product_id = p.product_id
+  join customers c on o.customer_id = c.customer_id
+WHERE year(order_date) = 2020 and (month(order_date) = 6 or month(order_date) = 7)
+GROUP BY o.customer_id, c.name, month(order_date)
+HAVING sum(quantity*price) >= 100
