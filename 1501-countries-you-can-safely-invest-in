@@ -1,0 +1,17 @@
+with cte as (
+  SELECT c.name, t.duration
+  FROM (
+    SELECT caller_id as id, duration
+    FROM calls
+    UNION ALL
+    SELECT callee_id as id, duration
+    FROM calls ) t 
+  left join persons p on t.id = p.id
+  left join country c on p.left(phone_number,3) = c.country_code
+)
+
+
+SELECT c.name, AVG(duration)
+FROM cte
+GROUP BY c.name
+HAVING AVG(duration)> (SELECT AVG(duration) FROM cte
