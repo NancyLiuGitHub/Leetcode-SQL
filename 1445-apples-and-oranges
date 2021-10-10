@@ -18,6 +18,6 @@ GROUP BY sale_date
 
 
 OTHER'S SOLUTION
-SELECT sale_date, (sum(if(fruit = 'apple', sold_num, -sold_num)) as diff
+SELECT sale_date, sum(if(fruit = 'apple', sold_num, -sold_num)) as diff
 FROM sales
 GROUP BY sale_date
