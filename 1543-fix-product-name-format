@@ -1,0 +1,5 @@
+SELECT product_name, left(sale_date, 7), count(sale_date)
+FROM sales
+WHERE product_name regrex '^[a-z]'
+GROUP BY product_name
+ORDER BY product_name, sale_date
