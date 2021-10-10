@@ -15,3 +15,9 @@ FROM (
 SELECT sale_date, (sum(if(fruit = 'apple', sold_num, 0)) - sum(if(fruit = 'oranges', sold_num, 0))) as diff
 FROM sales
 GROUP BY sale_date
+
+
+OTHER'S SOLUTION
+SELECT sale_date, (sum(if(fruit = 'apple', sold_num, -sold_num)) as diff
+FROM sales
+GROUP BY sale_date
