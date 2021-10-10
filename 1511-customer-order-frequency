@@ -4,3 +4,33 @@ FROM orders o join product p on o.product_id = p.product_id
 WHERE year(order_date) = 2020 and (month(order_date) = 6 or month(order_date) = 7)
 GROUP BY o.customer_id, c.name, month(order_date)
 HAVING sum(quantity*price) >= 100
+
+WRONG: because this can only select customers in at least a month of June or July, it can't select customers in both June and July
+
+method 1
+SELECT customer_id, name
+FROM customers
+WHERE customer_id IN (
+  SELECT customer_id
+  FROM orders o join product p on o.product_id = p.product_id
+  WHERE (month(order_date), year(order_date))= (6,2020)
+  GROUP BY customer_id
+  HAVING sum(quantity*price) >= 100
+)
+ and customer_id IN (SELECT customer_id
+  FROM orders o join product p on o.product_id = p.product_id
+  WHERE (month(order_date), year(order_date))= (7,2020)
+  GROUP BY customer_id
+  HAVING sum(quantity*price) >= 100)
+  
+  method 2
+  SELECT c.customer_id, c.customer_name
+  FROM (
+  SELECT customer_id,
+    sum(CASE WHEN left(order_date, 7) = '2020-06' THEN quantity*price END) as June_spent,
+    sum(CASE WHEN left(order_date, 7) = '2020-07' THEN quantity*price END) as July_spent
+  FROM orders o join product p on o.product_id = p.product_id
+  GROUP BY customer_id ) t
+  join customers c on t.customer_id and c.customer_id
+  WHERE June_spent > 100 and July_spent>100
+  
