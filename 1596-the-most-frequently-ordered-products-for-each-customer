@@ -6,3 +6,13 @@ WHERE (customer_id, product_id) IN
   GROUP BY customer_id, product_id
   ORDER BY count(order_id) desc
   LIMIT 1)
+
+
+window function
+SELECT customer_id, product_id, product_name
+FROM (
+  SELECT customer_id,product_id, rank() OVER (PARTITION BY customer_id, product_id ORDER BY count(order_id) desc) as r
+  FROM orders
+  GROUP BY customer_id, product_id
+) o join products p on o.product_id = p.product_id
+WHERE r = 1
