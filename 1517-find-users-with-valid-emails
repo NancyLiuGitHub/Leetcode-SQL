@@ -1,0 +1,4 @@
+SELECT *
+FROM users
+WHERE right(maiil,12) = 'leetcode.com'
+and left(mail,1) NOT LIKE '%[^a-zA-Z]%'
