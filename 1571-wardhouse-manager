@@ -1,0 +1,3 @@
+SELECT w.name, sum(units * width * length * height) as volumn
+FROM warehouse w left join products p on w.product_id = p.product_id
+GROUP BY w.name
