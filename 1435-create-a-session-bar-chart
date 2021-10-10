@@ -1,3 +1,4 @@
+WRONG - when a bin is 0, that bin will be missed
 SELECT bin, count(session_id) as total
 FROM
 (SELECT session_id, 
@@ -10,25 +11,24 @@ GROUP BY bin
 
 
 OTHER'S SOLUTION
-
+1)
 select '[0-5>' as bin, count(session_id) as total
 from Sessions
 where duration < 300
-
 union
-
 select '[5-10>' as bin, count(session_id) as total
 from Sessions
 where duration >= 300 and duration < 600
-
 union
-
 select '[10-15>' as bin, count(session_id) as total
 from Sessions
 where duration < 900 and duration >= 600
-
 union
-
 select '15 or more' as bin, count(session_id) as total
 from Sessions
 where duration >= 900
+
+2)
+SELECT '[O-5>' as bin,
+sum(case when duration <300 then 1 else 0 end) total
+from session
