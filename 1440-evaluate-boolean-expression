@@ -1,8 +1,22 @@
 SELECT left_operand, operator, right_operand, 
-  (case when v1.value > v2.value and operator = '>' then 'true' else 'false'
-  case when v1.value = v2.value and operator = '=' then 'true' else 'false'
-  case when v1.value < v2.value and operator = '<' then 'true' else 'false'
+  (case when v1.value > v2.value and operator = '>' then 'true' 
+  case when v1.value = v2.value and operator = '=' then 'true' 
+  case when v1.value < v2.value and operator = '<' then 'true'
+  else 'false'
   end ) as value
 FROM expressions
   left join variables v1 on v1.name = left_operand
   left join variables v2 on v2.name = right_operand
+
+
+OTHER'S SOLUTION
+1)
+select e.left_operand, e.operator, e.right_operand,
+    case
+        when e.operator = '<' then if(l.value < r.value,'true','false')
+        when e.operator = '>' then if(l.value > r.value,'true','false')
+        else if(l.value = r.value,'true','false')
+    end as value
+from expressions e 
+left join variables l on e.left_operand = l.name 
+left join variables r on e.right_operand = r.name
