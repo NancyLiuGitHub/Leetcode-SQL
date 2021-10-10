@@ -1,0 +1,19 @@
+window function
+1)dense_rank
+SELECT a.id, name
+FROM (
+SELECT id, dense_rank() over (partition by id order by login_date range between 4 preciding day and current day) as r
+FROM logins ) t
+  JOIN accounts a ON t.id = a.id
+WHERE r = 5
+
+2)row
+SELECT t.id, name
+FROM (
+SELECT id, login_date, 
+row() over (partition by id over by login_date) as row_num,
+dateadd (day, -row() over (partition by id over by login_date), login_date) as group
+FROM (select distinct id, login_date from logins)
+) t join accounts a on t.id = a.id
+GROUP BY t.id, name, group
+HAVING count(login_date)>=5
