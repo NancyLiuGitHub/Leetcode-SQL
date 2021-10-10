@@ -1,7 +1,31 @@
+https://circlecoder.com/the-most-recent-orders-for-each-product/
+1)method 1
 SELECT product_name, product_id, order_id, order_date
 FROM (
   SELECT product_id, max(order_date)
   FROM orders
   GROUP BY product_id) t
   join products p on t.product_id = p.product_id
+ORDER BY product_name, product_id, order_id
+#wrong answer: because there is a product ordered twice in a day, but result only return one record instead of two records
+
+correct
+FROM orders o join () t on o.product_id = p.product_id
+
+2)method 2
+SELECT product_name, product_id, order_id, order_date
+FROM (
+  SELECT product_id, rank() OVER (PARTITION BY o.product_id ORDER BY order_date desc) as r
+  FROM orders join products p on t.product_id = p.product_id) t
+WHERE r = 1
 ORDERY BY product_name, product_id, order_id
+
+3)method 3
+SELECT product_name, o.product_id, order_id, order_date
+FROM orders o join products p on o.product_id = p.product_id
+WHERE (o.product_id, order_date) IN
+(
+  SELECT product_id, max(order_date)
+  FROM orders
+  GROUP BY product_id) 
+ORDER BY product_name, o.product_id, order_id
