@@ -1,0 +1,11 @@
+SELECT sale_date, (t1.apple_sold-t2.orange_sold) as diff
+FROM (
+  SELECT sale_date, fruit as apple, sold_num as apple_sold
+  FROM sales
+  WHERE fruit = 'apple') t1
+  join
+  SELECT sale_date, fruit as oranges, sold_num as orange_sold
+  FROM sales
+  WHERE fruit = 'oranges') t2
+  on t1.sale_date = t2.sale_date
+  ) tb
