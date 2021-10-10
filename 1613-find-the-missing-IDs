@@ -3,3 +3,37 @@ FROM (
 SELECT row_num() over (range between 1 and max(customer_id) following row as ids
 FROM customers) t
 WHERE ids NOT IN (SELECT customer_id FROM customers)
+#wrong
+
+OTHER's SOLUTION
+WITH RECURSIVE CTE AS(
+    SELECT 1 AS 'id', MAX(c.customer_id) AS 'Max_Id'
+    FROM Customers c
+    UNION ALL
+    SELECT id+1, Max_Id
+    FROM CTE
+    WHERE id < Max_id
+)
+
+SELECT id AS 'ids'
+FROM CTE c
+WHERE c.id NOT IN (SELECT customer_id FROM Customers)
+ORDER BY 1 ASC
+
+
+Generate all numbers from 1 to 100, and select the numbers in the range from 1 to 100 and not in customer_id.
+select ids 
+from 
+(
+    select x * 10 + y + 1 as ids 
+    from 
+    (
+        select 0 as x union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9
+    ) as tens, 
+    (
+        select 0 as y union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9
+    ) as ones
+    order by ids
+) as num
+where ids < (select max(customer_id) from Customers)
+and ids not in (select distinct customer_id from Customers);
