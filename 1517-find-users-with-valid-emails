@@ -1,4 +1,17 @@
 SELECT *
 FROM users
 WHERE right(maiil,12) = 'leetcode.com'
-and left(mail,1) NOT LIKE '%[^a-zA-Z]%'
+and and mail REGEXP '^[a-zA-Z]'
+
+
+OTHER SOLUTION
+select * from Users 
+where regexp_like(mail, '^[A-Za-z]+[A-Za-z0-9\_\.\-]*@leetcode.com$')
+
+^ 开头
++ 一个或多个， 不包括空
+[] 合集里的任意一个
+\\转义特殊字符
+a{m,n} 匹配m到n个a
+$ 以什么结尾
+https://www.runoob.com/mysql/mysql-regexp.html
