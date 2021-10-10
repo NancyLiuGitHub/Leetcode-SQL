@@ -1,5 +1,5 @@
-SELECT id as user_id, user_name, sum(amount)+sum(credit), 
-  case when sum(amount)+sum(credit)>= 0 then 'No' ELSE 'Yes' END as 'credit_limit_breached
+SELECT id as user_id, user_name, ifnull(sum(amount),0)+sum(credit), 
+  case when ifnull(sum(amount),0)+sum(credit)>= 0 then 'No' ELSE 'Yes' END as 'credit_limit_breached
 FROM (
 SELECT paid_by as id, -amount as amount
 FROM transactions
@@ -8,3 +8,13 @@ SELECT paid_to as id, amount
 FROM transaction
 ) t join users u on t.id = u.user_id
 GROUP BY user_id, user_name
+
+OTHER SOLUTION
+select *, (case when credit < 0 then "Yes" else "No" end) as credit_limit_breached
+from (select u.user_id, u.user_name, 
+      credit + ifnull(sum((case when u.user_id=t.paid_by then -t.amount
+                               else t.amount end)), 0) as credit
+      from Users u
+      left join Transactions t
+      on u.user_id = t.paid_by or u.user_id = t.paid_to
+      group by u.user_id, u.user_name) t
