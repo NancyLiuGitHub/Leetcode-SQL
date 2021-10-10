@@ -10,5 +10,6 @@ ORDER BY area, p1, p2
 correction
 select a.id as p1, b.id as p2,
       (abs(a.x - b.x) * abs(a.y - b.y)) as area
-from Points a, Points b
+from Points a, Points b   ## OTHER SOLUTION: points a left join points b on a.id<b.id
 where a.id < b.id and a.x != b.x and a.y != b.y
+
