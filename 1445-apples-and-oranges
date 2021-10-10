@@ -1,3 +1,4 @@
+1)
 SELECT sale_date, (t1.apple_sold-t2.orange_sold) as diff
 FROM (
   SELECT sale_date, fruit as apple, sold_num as apple_sold
@@ -9,3 +10,8 @@ FROM (
   WHERE fruit = 'oranges') t2
   on t1.sale_date = t2.sale_date
   ) tb
+
+2)
+SELECT sale_date, (sum(if(fruit = 'apple', sold_num, 0)) - sum(if(fruit = 'oranges', sold_num, 0))) as diff
+FROM sales
+GROUP BY sale_date
