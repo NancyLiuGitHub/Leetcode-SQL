@@ -1,3 +1,4 @@
-SELECT name, ifnull(sum(amount),0) as balance
+SELECT name, sum(amount) as balance
 FROM users u left join transaction t on u.account = t.account
 GROUP BY u.account, u.name
+HAVING sum(amount) > 10000
