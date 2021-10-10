@@ -1,3 +1,6 @@
-SELECT title
+SELECT distinct title
 FROM content
 WHERE kids_content = 'Y' and content_type = 'movie' and contect_id IN (select content_id from tvprogram where left(program_date,7) = '2020-06')
+
+OTHER SOLUTION
+and (month(program_date),year(program_date)) = (6,2020)
