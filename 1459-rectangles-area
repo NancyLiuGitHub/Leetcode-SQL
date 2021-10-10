@@ -1,5 +1,14 @@
+didn't understand the question correctly!
+
 SELECT if(a1<=a2,a1,a2) p1, if(a1<=a2, a2, a1) p2, a1*a2 area
 FROM (
 SELECT distinct abs(p1.x-p2.x) a1, abs(p1.y - p2.y) a2
 FROM points p1 left join points p2 on p1.x != p2.x and p1.y != p2.y) t
 ORDER BY area, p1, p2
+
+
+correction
+select a.id as p1, b.id as p2,
+      (abs(a.x - b.x) * abs(a.y - b.y)) as area
+from Points a, Points b
+where a.id < b.id and a.x != b.x and a.y != b.y
