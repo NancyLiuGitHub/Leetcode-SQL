@@ -1,0 +1,3 @@
+SELECT date_id, make_name, count(distinct lead_id), count(distinct partner_id)
+FROM dialysales
+GROUP BY date_id, make_name
