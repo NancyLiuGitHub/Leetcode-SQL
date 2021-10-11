@@ -4,3 +4,14 @@ SELECT c1.from_id person1, c1.to_id person2,
 FROM calls c1 left join calls c2 on c1.from_id = c2.to_id and c1.to_id = c2.from_id
 WHERE c1.from_id < c1.to_id
 GROUP BY c1.from_id, c1.to_id
+## wrong
+
+## correction, switch
+
+SELECT person1, person2, count(duration), sum(duration)
+FROM (
+SELECT duration,
+  case when from_id > to_id then to_id else from_id end as person1,
+  case when from_id > to_id then from_id else to_id end as person2
+from calls)
+GROUP BY 1,2
