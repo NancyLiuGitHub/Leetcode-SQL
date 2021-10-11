@@ -1,0 +1,5 @@
+SELECT c1.from_id person1, c1.to_id person2, 
+  count(c1.duration + ifnull(c2.duration)) as call_count,
+  sum(c1.duration + ifnull(c2.duration,0)) as total_duration
+FROM calls c1 left join calls c2 on c1.from_id = c2.to_id and c1.to_id = c2.from_id
+WHERE c1.from_id < c1.to_id
