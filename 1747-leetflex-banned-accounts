@@ -1,0 +1,5 @@
+SELECT distinct t1.account_id
+FROM loginfo t1 left join loginfo t2 
+  on t1.acount_id = t2.accountid 
+     and t1.ip_address != t2.ip_address
+WHERE t1.login<=t2.login and t2.login <= t1.logout
