@@ -15,3 +15,25 @@ SELECT duration,
   case when from_id > to_id then from_id else to_id end as person2
 from calls)
 GROUP BY 1,2
+
+##simplier version from other's solution
+SELECT 
+  if(from_id > to_id, to_id, from_id) person1,
+  if(from_id > to_id, from_id, to_id) person2
+  count(duration), sum(duration)
+FROM calls
+GROUP BY 1,2
+
+
+OTHER SOLUTION
+select from_id as person1,to_id as person2,
+    count(duration) as call_count, sum(duration) as total_duration
+from (select * 
+      from Calls 
+      union all
+      select to_id, from_id, duration 
+      from Calls) t1
+where from_id < to_id
+group by person1, person2
+
+
