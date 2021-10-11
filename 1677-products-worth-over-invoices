@@ -1,0 +1,4 @@
+SELECT name, ifnull(sum(rest),0), ifnull(sum(paid),0), ifnull(sum(canceled),0), ifnull(sum(refunded),0)
+FROM product p left join invoice i on p.product_id = i.product_id
+GROUP BY p.product_id, name
+ORDER BY name
