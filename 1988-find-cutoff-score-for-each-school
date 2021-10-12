@@ -1,5 +1,5 @@
 MY SOLUTION
-METHOD1
+METHOD1 (wrong)
 with cte as (
   SELECT *, rank() OVER (ORDER BY score desc) as r
   FROM schools, exam
