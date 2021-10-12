@@ -14,6 +14,13 @@ with cte as (
  METHOD2 (wrong)
  SELECT school_id, if(capacity > student_count, then min(score), -1) as score
  FROM school, exam
+ 
+ METHOD3
+ SELECT school_id, ifnull(min(score),-1) as score
+ FROM schools s, 
+  (SELECT *, sum(student_count) over (order by score desc) as r_total
+ WHERE s.capactiy <= r_total
+ GROUP BY school_id
 
 
 OTHER SOLUTION
