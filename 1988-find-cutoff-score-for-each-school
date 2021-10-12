@@ -1,5 +1,5 @@
 MY SOLUTION
-METHOD1 (wrong)
+METHOD1
 with cte as (
   SELECT *, rank() OVER (ORDER BY score desc) as r
   FROM schools, exam
@@ -17,9 +17,8 @@ with cte as (
  
  METHOD3
  SELECT school_id, ifnull(min(score),-1) as score
- FROM schools s, 
-  (SELECT *, sum(student_count) over (order by score desc) as r_total
- WHERE s.capactiy <= r_total
+ FROM schools s, exam e
+ WHERE s.capactiy >= student_count
  GROUP BY school_id
 
 
