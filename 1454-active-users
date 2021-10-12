@@ -1,6 +1,6 @@
 window function
 1)dense_rank
-SELECT a.id, name
+SELECT distinct a.id, name
 FROM (
 SELECT id, dense_rank() over (partition by id order by login_date range between interval '4' day preceding and current row) as r
 FROM logins ) t
@@ -22,7 +22,8 @@ GROUP BY t.id, name, group
 HAVING count(distinct login_date)>=5
 
 OTHER'S SOLUTION
-SOLUTION 1: make 2) simplier: 1)convert the date into number -> 2)minus dense_rank() 3)get the group
+SOLUTION 1: make 2) simplier: 1)convert the date into number -> 2)minus dense_rank() 3)get the grou
+
 select a.id, a.name
 from Accounts a
 where a.id in
@@ -42,3 +43,13 @@ FROM (
   ) t join accounts a on t.id = a.id
 GROUP BY t.id, name, date_sub(login_date, interval r day)
 HAVING count(distinct login_date)>=5
+
+
+
+SOLUTION 3(BEST)
+
+SELECT distinct l1.id, name
+FROM logins l1 join login2 l2 on l1.id = l2.id and datediff(l2.login_date, l1.login_date) between 1 and 4
+  join accounts on a.id = l1.id
+GROUP BY l1.id, l1.login_date
+HAVING count(distinct l2.login_date) = 4
