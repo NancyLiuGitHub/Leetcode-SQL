@@ -17,8 +17,8 @@ with cte as (
  
  METHOD3
  SELECT school_id, ifnull(min(score),-1) as score
- FROM schools s, exam e
- WHERE s.capactiy >= student_count
+ FROM schools s left join exam e
+  on s.capactiy >= student_count ##cross doesn't work because where will filter the score where capacity < student
  GROUP BY school_id
 
 
