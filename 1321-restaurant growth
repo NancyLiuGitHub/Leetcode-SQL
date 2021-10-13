@@ -5,6 +5,7 @@ sum(amount) over (order by visited_on rows between 6 preceding and current row) 
 round(avg(amount) over (order by visited_on rows between 6 preceding and current row),2) as avg_amount
 FROM (select visited_on, sum(amount) from customer group by visited_on) t
 WHERE date_sub(visited_on, inteval 6 day) >= (SELECT min(visited) FROM customer)
+# where datediff(visited_on, (select min(visted_on) from customer))>=6
 
 subquery
 with cte as
@@ -36,4 +37,12 @@ FROM cte c1 left join cte c2
   on c2.visited_on >= date_sub(c1.visited_on, interval 6 day) and c2.visited_on <= c1.visited_on
 GROUP BY c1.visited_on
 HAVING count(c2.visited_on) >= 7
+order by c1.visited_on
+
+# optimize
+SELECT c1.visited_on, sum(c2.amount), round(avg(c2.amount),2)
+FROM cte c1, cte c2
+  on datediff(c1.visited_on, c2.visted_on) between 0 and 6 ### or datediff(c2.visited_on, c2.visited_on) either way works
+GROUP BY c1.visited_on
+HAVING count(c2.visited_on) = 7
 order by c1.visited_on
