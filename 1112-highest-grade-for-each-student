@@ -25,3 +25,5 @@ SELECT student_id, course_id, grade
 FROM (SELECT *, RANK() OVER (PARTITION BY student_id ORDER BY grade desc, course_id) as r FROM enrollment) tmp
 WHERE r = 1
 ORDER BY student_id
+--checked on AWS and works
+
