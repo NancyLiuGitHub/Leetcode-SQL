@@ -1,7 +1,7 @@
 SELECT left_operand, operator, right_operand, 
   (case when v1.value > v2.value and operator = '>' then 'true' 
-  case when v1.value = v2.value and operator = '=' then 'true' 
-  case when v1.value < v2.value and operator = '<' then 'true'
+        when v1.value = v2.value and operator = '=' then 'true' 
+        when v1.value < v2.value and operator = '<' then 'true'
   else 'false'
   end ) as value
 FROM expressions
