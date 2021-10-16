@@ -14,6 +14,4 @@ from (
   from employee
   )
 where 
-case when mod(c/2) = 1 then r = round(c/2)
-  else r in (c/2, (c/2)+1)
-  end
+r between c/2 and c/2+1
