@@ -8,3 +8,5 @@ where (t.Request_at between '2013-10-01' and '2013-10-03')
 and u1.Banned = 'No' 
 and u2.Banned = 'No'）as tb
 group by day
+
+##numeriator should use sum instead of count, count will still count even it is a zero
