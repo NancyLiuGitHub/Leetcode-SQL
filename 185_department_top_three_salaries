@@ -1,0 +1,6 @@
+Select Department, Employee, Salary
+From (
+    Select E.Name as Employee, E.Salary, D.Name as Department, Dense_Rank() Over (Partition by E.DepartmentID Order by Salary Desc) r
+    From Employee E join Department D on E.DepartmentID = D.Id
+) as temp
+Where r < 4
