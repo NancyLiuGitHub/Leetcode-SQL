@@ -22,3 +22,5 @@ from
   sum(frequency) over () tot_sum
 from numbers )t
 where cum_sum between tot_sum/2 and tot_sum/2+1
+### where statatment is wrong
+### should be where tot_sum/2 between cum_sum-freq and cum_sum
