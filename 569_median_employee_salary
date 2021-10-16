@@ -1,0 +1,19 @@
+employee: Id, Company, Salary
+goal: median salary of each company
+5 employees ->3
+6 employees ->3,4
+
+1)rank for each company
+2)if mod(count(id)/2) = 1, select id where r = round(count(id)/2), otherwise select id where r in count(id)/2 and count(id)/2+1
+
+select employeeID, company_name, salary
+from (
+  select *, 
+  count(id) over (partition by company_id) as c,
+  row_number() over (partition by company_id order by salary) as r
+  from employee
+  )
+where 
+case when mod(c/2) = 1 then r = round(c/2)
+  else r in (c/2, (c/2)+1)
+  end
