@@ -10,7 +10,7 @@ select id, company_id, salary
 from (
   select *, 
   count(id) over (partition by company_id) as c,
-  row_number() over (partition by company_id order by salary) as r
+  row_number() over (partition by company_id order by salary, id) as r  ###id should be added when there is a tie
   from employee
   )
 where 
