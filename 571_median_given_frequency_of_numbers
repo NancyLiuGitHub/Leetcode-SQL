@@ -1,0 +1,24 @@
+numbers: number, frequency
+sum(frequency) over (order by number)
+sum(frequency) over ()
+7 7
+1 8
+2 10
+5 15
+
+median 8
+
+7 7
+1 8
+2 10
+4 14
+
+median 7 and 8
+
+select avg(number) as median
+from
+(select *, 
+  sum(frequency) over (order by number) cum_sum,
+  sum(frequency) over () tot_sum
+from numbers )t
+where cum_sum between tot_sum/2 and tot_sum/2+1
