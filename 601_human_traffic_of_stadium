@@ -1,0 +1,10 @@
+select id, visit_date, people
+from (
+select *, 
+    row_number() over (order by id rows between 2 preceding and current row) r1,
+    row_number() over (order by id rows between 1 preceding and 1 following) r2,
+    row_number() over (order by id rows between current row and 2 following) r3
+from Stadium 
+where people >= 100)t
+where r1 =3 or r2 =3 or r3 = 3
+order by visit_date
