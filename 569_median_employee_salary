@@ -6,7 +6,7 @@ goal: median salary of each company
 1)rank for each company
 2)if mod(count(id)/2) = 1, select id where r = round(count(id)/2), otherwise select id where r in count(id)/2 and count(id)/2+1
 
-select employeeID, company_name, salary
+select id, company_id, salary
 from (
   select *, 
   count(id) over (partition by company_id) as c,
