@@ -14,8 +14,44 @@ order by visit_date
 
 
 select ID, visit_date, people, 
-count(*) over (order by timestamp(visit_date) range between current row and 2 following) follow_cnt, ### or order by id
+count(*) over (order by timestamp(visit_date) range between current row and 2 following) follow_cnt,
 count(*) over (order by timestamp(visit_date) range between 2 preceding and current row) prec_cnt,
 count(*) over (order by timestamp(visit_date) range between 1 preceding and 1 following) curr_cnt
 from Stadium
 where people >= 100
+###wrong
+### if order by "date" type, range should look like below:
+select *, 
+count(id) over (order by timestamp(visit_date) range between current row and interval 2 day following) follow_cnt, 
+count(id) over (order by timestamp(visit_date) range between interval 2 day preceding and current row) prec_cnt,
+count(id) over (order by timestamp(visit_date) range between interval 1 day preceding and interval 1 day following) curr_cnt
+from Stadium
+where people >= 100
+
+Result (the count() will follow the date order):
+["id", "visit_date", "people", "follow_cnt", "prec_cnt", "curr_cnt"], 
+[2, "2017-01-02",  109,         2 (2,3),       1 (2),     2 (2,3)], 
+[3, "2017-01-03",   150,        2 (3,5),       2 (2,3),   2 (2,3)], 
+[5, "2017-01-05",   145,        3 (5,6,7),     2 (3,5),   2 (5,6)], 
+[6, "2017-01-06",   1455,       2 (6,7),       2 (5,6),   3 (5,6,7)], 
+[7, "2017-01-07",   199,        2 (7,8),       3 (5,6,7), 2 (6,7)], 
+[8, "2017-01-09",   188,        1 (8),         2 (7,8),   1 (8)]
+
+###correct answer
+select id, visit_date, people
+from (
+select *, 
+    count(id) over (order by id range between current row and 2 following) c1,
+    count(id) over (order by id range between 2 preceding and current row) c2,
+    count(id) over (order by id range between 1 preceding and 1 following) c3
+from Stadium 
+where people >= 100) t
+where c1 =3 or c2 =3 or c3=3
+Result of the window function (the count will follow the id order):
+["id", "visit_date", "people", "c1",      "c2", "c3"], 
+[2, "2017-01-02",     109,      2 (2,3),   1, 2], 
+[3, "2017-01-03",     150,      2 (3,5),   2, 2], 
+[5, "2017-01-05",     145,      3 (5,6,7), 2, 2], 
+[6, "2017-01-06",     1455,     3 (6,7,8), 2, 3], 
+[7, "2017-01-07",     199,      2 (7,8),   3, 3], 
+[8, "2017-01-09",     188,      1 (8),     3, 2]]}
