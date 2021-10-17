@@ -3,5 +3,8 @@
 
 SELECT a1.event_date, round(sum(if(datediff(a2.event_date, a1.event_date) = 1, 1, 0))/count(distinct a1.player_id),2)
 FROM activity a1 left join activity a2 on a1.player_id = a2.player_id
+###need a where to get the install date
+WHERE (a1.event_date, a1.player_id) in 
+      (SELECT min(event_date), player_id from activity group by 2)
 GROUP BY 1
 
