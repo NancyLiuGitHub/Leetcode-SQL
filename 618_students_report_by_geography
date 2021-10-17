@@ -1,0 +1,11 @@
+student: name, continent
+
+result: continent1, continet2, ...
+order by c1,c2...
+
+select 
+case when continent = 'America' THEN name END AS America,
+case when continent = 'Europe' THEN name END AS Europe,
+...
+FROM student
+ORDER BY America
