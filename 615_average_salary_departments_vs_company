@@ -1,0 +1,21 @@
+salary: id, employee_id, amount, pay_date
+employee: employee_id, department_id
+goal: comparison result
+      department's avg salary vs company's avg salary
+final table: pay_month, department, comparison
+
+1) avg for company by month
+2) avg for depart by month group by depart
+3) compare use case when
+
+SELECT 
+month as pay_month, 
+department_id,
+CASE WHEN avg_dep > avg_company THEN 'Higher'
+    WHEN avg_dep < avg_company THEN 'Lower'
+    ELSE 'SAME' END as comparison
+FROM
+(SELECT month(pay_date) as month, department_id, 
+  avg(salary) over (partition by month(pay_date)) as avg_company,
+  avg(salary) over (partition by month(pay_date), deparment_id) as avg_dep
+FROM employee e join salary s on e.employee_id = s.employee_id ) t
