@@ -8,3 +8,14 @@ from Stadium
 where people >= 100)t
 where r1 =3 or r2 =3 or r3 = 3
 order by visit_date
+### wrong
+###1)should use count(*) or count(id) to get the number of ids
+###2)should use range instead of rows to get consecutive id because 'rows' can't identify the value of the id but 'range' can
+
+
+select ID, visit_date, people, 
+count(*) over (order by timestamp(visit_date) range between current row and 2 following) follow_cnt, ### or order by id
+count(*) over (order by timestamp(visit_date) range between 2 preceding and current row) prec_cnt,
+count(*) over (order by timestamp(visit_date) range between 1 preceding and 1 following) curr_cnt
+from Stadium
+where people >= 100
