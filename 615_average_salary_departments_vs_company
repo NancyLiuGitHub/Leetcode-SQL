@@ -24,7 +24,7 @@ FROM employee e join salary s on e.employee_id = s.employee_id ) t
 use join
 
 with cte1 as (
-select month(pay_date) as month, avg(amount) as avg_company from salary
+select month(pay_date) as month, avg(amount) as avg_company from salary group by 1
 )
 
 with cte2 as (
