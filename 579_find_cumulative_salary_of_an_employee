@@ -1,0 +1,18 @@
+1)exclude the most recent month
+2)sum(salary) over 3 months 
+3)order by id, month desc
+
+employee: id, month, salary
+
+with tmp as (
+select *
+from employee
+where (id, month) not in (select id, max(month) from employee group by id) )
+
+select 
+id, 
+month, 
+sum(salary) (partition by id order by month rows between 2 preceding and current row) as cum_salary 
+## doesn't have to be consecutive so use rows, if consecutive is required then use range
+from tmp
+order by id, month desc
