@@ -9,3 +9,22 @@ case when continent = 'Europe' THEN name END AS Europe,
 ...
 FROM student
 ORDER BY America
+### the result will contain null
+
+
+to make it right:
+
+select America, Aisa, Europe
+FROM (
+  SELECT name, row_num() over (order by name) as r
+  FROM student
+  WHERE contient = 'America'
+) t2
+LEFT JOIN ###(this is important because amarica has more or equal student than asia or europe)
+ (SELECT name, row_num() over (order by name) as r
+  FROM student
+  WHERE contient = 'Asia') t2 on t1.r=t2.r
+LEFT JOIN
+  (SELECT name, row_num() over (order by name) as r
+  FROM student
+  WHERE contient = 'Europe') t3 on t1.r = t3.r
