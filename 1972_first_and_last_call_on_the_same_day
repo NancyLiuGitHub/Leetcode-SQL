@@ -16,3 +16,18 @@ select date(call_time) dat, caller1, caller2, max(call_time) time from summary g
 SELECT distinct caller1 as user_id
 FROM cte1 join cte2 on cte1.date = cte2.date and cte1.caller_id = cte2.caller_id and cte1.recipient_id_id = cte2.recipient_id
 
+##answer above is wrong.
+##has to use window function
+
+1)keep the summary cte table
+2)use rank() to record the min and max all time during the day per user
+
+select distinct t1.caller1
+FROM
+(SELECT *, 
+  rank() over (partition by caller1, date(call_time)) order by call_time) as min
+FROM summary) t1 join 
+(SELECT *, 
+  rank() over (partition by caller1, date(call_time)) order by call_time desc) as max
+FROM summary) t2 
+ on t1.caller1 = t2.caller1 and date(t1.call_time) = date(t2.call_time) and min =1 and max =1 and t1.caller2 = t2.caller2
