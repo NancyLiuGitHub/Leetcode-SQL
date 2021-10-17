@@ -1,0 +1,12 @@
+1) first call
+2) last call
+3) join 1) and 2) match by caller_id, recipient_id, and date(call_time)
+
+SELECT distinct caller1 as user_id
+FROM (
+select caller_id as caller1, recipient_id as caller2, call_time from calls
+union all
+select recipient_id as caller1, caller_id as caller2, call_time from calls
+)
+GROUP BY date(call_time), caller1, caller2
+HAVING min(call_time) != max(call_time)
