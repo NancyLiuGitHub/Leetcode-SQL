@@ -19,3 +19,23 @@ FROM
   avg(salary) over (partition by month(pay_date)) as avg_company,
   avg(salary) over (partition by month(pay_date), deparment_id) as avg_dep
 FROM employee e join salary s on e.employee_id = s.employee_id ) t
+
+
+use join
+
+with cte1 as (
+select month(pay_date) as month, avg(amount) as avg_company from salary
+)
+
+with cte2 as (
+select month(pay_date) as month, department_id, avg(amount) as avg_dep from salary s join employee e on s.employee_id = e.employee_id group by 1,2
+)
+
+SELECT 
+month as pay_month, 
+department_id,
+CASE WHEN avg_dep > avg_company THEN 'Higher'
+    WHEN avg_dep < avg_company THEN 'Lower'
+    ELSE 'SAME' END as comparison
+FROM
+     cte1 join cte2 on cte1.month = cte2.month
