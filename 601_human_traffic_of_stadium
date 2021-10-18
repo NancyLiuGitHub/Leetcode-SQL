@@ -55,3 +55,14 @@ Result of the window function (the count will follow the id order):
 [6, "2017-01-06",     1455,     3 (6,7,8), 2, 3], 
 [7, "2017-01-07",     199,      2 (7,8),   3, 3], 
 [8, "2017-01-09",     188,      1 (8),     3, 2]]}
+
+
+if use 'rows' instead of 'range', here is the result looks like. rows can't identify if the id is consecutive or not
+["id", "visit_date", "people", "c1", "c2", "c3"], 
+[2, "2017-01-02", 109, 3 (2,3,5), 1, 2], 
+[3, "2017-01-03", 150, 3, 2, 3], 
+[5, "2017-01-05", 145, 3, 3, 3], 
+[6, "2017-01-06", 1455, 3, 3, 3], 
+[7, "2017-01-07", 199, 2, 3, 3], 
+[8, "2017-01-09", 188, 1, 3, 2]]}
+
