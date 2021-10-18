@@ -1,0 +1,20 @@
+page is liked by friend but not liked by user_id
+final table: user_id, page_id, number of friends_likes
+
+1) create a user table with all pages that friends like
+2) create an another table with all pages that user like
+3) 1)-2)
+
+
+u1 u2
+1  2
+3  1
+
+SELECT user, page, count(friend)
+FROM (
+SELECT user1_id as user, page_id as page, user2_id as friend from friendship f join likes l on f.user2_id = user_id
+union
+SELECT user2_id as user, page_id as page, user1_id as friend from friendship f join likes l on f.user1_id = user_id
+)t
+WHERE (user,page) NOT IN (SELECT * from likes)
+GROUP BY 1,2
