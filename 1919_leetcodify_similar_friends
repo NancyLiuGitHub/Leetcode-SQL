@@ -18,4 +18,4 @@ FROM friendship f
   left join listens l2 on f.user2_id = l2.user_id
 WHERE l1.song = l2.song and l1.day =l2.day
 GROUP BY user1_id, user2_id, l1.day
-HAVING count(l1.song) >= 3
+HAVING count(distinct l1.song) >= 3
