@@ -3,7 +3,8 @@ count(song) >= 3 on the same day
 
 SELECT l1.user_id, l2.user_id
 FROM 
-  listens l1 join listens l2 on l1.user_id<l2.user_id and l1.day = l2.day and l1.song= l2.song
+  listens l1 join listens l2 on l1.user_id != l2.user_id and l1.day = l2.day and l1.song= l2.song
 WHERE (l1.user_id, l2.user_id) NOT IN (select user1_id, user2_id from friendship)
+  and (l2.user_id, l1.user_id) NOT IN (select user1_id, user2_id from friendship)
 GROUP BY l1.user_id, l2.user_id, l1.day
 HAVING count(disctinct l1.song)>=3
