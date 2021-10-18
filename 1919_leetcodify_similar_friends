@@ -1,0 +1,21 @@
+1) x, y in friendship table
+2) >=3 same songs on the same day
+3) user1<user2
+return: user1, user2
+
+1)two joins one for user1 the other for user2
+2)condition same day, same song, user1<user2
+3)group by day, user1,user2, count(song)>=3
+
+u1 u2 u1.song u1.day u2.song u2.day
+1  2  10       3/1    10      3/1
+
+
+
+SELECT user1, user2
+FROM friendship f
+  left join listens l1 on f.user1_id = l1.user_id
+  left join listens l2 on f.user2_id = l2.user_id
+WHERE l1.song = l2.song and l1.day =l2.day
+GROUP BY user1_id, user2_id, l1.day
+HAVING count(l1.song) >= 3
