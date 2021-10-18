@@ -66,3 +66,21 @@ if use 'rows' instead of 'range', here is the result looks like. rows can't iden
 [7, "2017-01-07", 199, 2, 3, 3], 
 [8, "2017-01-09", 188, 1, 3, 2]]}
 
+
+OTHER'S SOLUTION
+SELECT ID
+    , visit_date
+    , people
+FROM (
+    SELECT ID
+        , visit_date
+        , people
+        , LEAD(people, 1) OVER (ORDER BY id) nxt
+        , LEAD(people, 2) OVER (ORDER BY id) nxt2
+        , LAG(people, 1) OVER (ORDER BY id) pre
+        , LAG(people, 2) OVER (ORDER BY id) pre2
+    FROM Stadium
+) cte 
+WHERE (cte.people >= 100 AND cte.nxt >= 100 AND cte.nxt2 >= 100) 
+    OR (cte.people >= 100 AND cte.nxt >= 100 AND cte.pre >= 100)  
+    OR (cte.people >= 100 AND cte.pre >= 100 AND cte.pre2 >= 100) 
