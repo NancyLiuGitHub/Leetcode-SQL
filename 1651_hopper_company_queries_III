@@ -1,0 +1,28 @@
+1) create a table from 1-10 months and left join ride and accepted
+2) window function
+3) group by
+
+with months as (
+(SELECT 1 as month
+union
+SELECT 2 as month
+union
+SELECT 3 as month
+...
+union
+SELECT 12 as month),
+
+cte as (
+SELECT month, sum(ride_distanct) as dist, sum(ride_duration) as duration
+FROM months left join rides r on month = month(r.requested_at)
+  left join acceptedrides a on r.ride_id = a.ride_id
+WHERE year(r.requested_at) = 2020
+GROUP BY 1)
+
+SELECT *
+FROM
+(SELECT month,
+  AVG(dist) over (order by month range 2 following) as avg_dist,
+  AVG(duration) over (order by month range2 following) as avg_duration
+FROM cte) t
+WHERE month <= 10
