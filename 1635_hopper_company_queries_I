@@ -1,0 +1,23 @@
+year=2020
+group by month
+count(cum_active_drivers) 
+count(accepted_rides) rides join accepted rides
+
+with cte as (
+SELECT year_month, 
+       sum(total_driver) over (order by year_month) as cum_activedriver
+FROM (
+SELECT date_format(join_date, '%Y-%m') year_month, count(driver_id) as total_driver 
+FROM drivers WHERE year(join_date)<2021
+GROUP BY 1
+) t ),
+cte2 as (
+SELECT month(requested_at) as month, count(a.ride_id) as accepted_rides
+FROM rides r join acceptedrides a on r.ride_id = a.ride_id
+WHERE year(requested_at) = 2020
+GROUP BY 1
+)
+
+SELECT month(year_month) as month, cum_activedriver as active_drivers, accepted_rides
+FROM cte left join cte2 on cte.month = cte2.month
+WHERE year(year_month) = 2020
