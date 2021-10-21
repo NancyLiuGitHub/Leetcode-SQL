@@ -18,6 +18,6 @@ WHERE year(requested_at) = 2020
 GROUP BY 1
 )
 
-SELECT month(year_month) as month, cum_activedriver as active_drivers, accepted_rides
+SELECT month(year_month) as month, cum_activedriver as active_drivers, ifnull(accepted_rides,0)
 FROM cte left join cte2 on cte.month = cte2.month
 WHERE year(year_month) = 2020
