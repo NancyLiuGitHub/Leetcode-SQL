@@ -1,0 +1,25 @@
+year = 2020
+each month -> group by month
+pct = 100 * distinct driver_id in acceptedrides / total driver avaiable 
+  total driver -> cum_sum
+
+
+with cte as (
+SELECT if(year(join_date)<2020, 1, month(join_date) ) month, count(driver_id) as available
+FROM drivers
+WHERE year(join_date) <= 2020
+GROUP BY 1)
+
+SELECT month, 100 * active/ cum_available as pct
+FROM (
+SELECT month, sum(driver_id) over (order by month) as cum_available
+FROM cte
+)t1 
+left join
+(
+SELECT month(requested_at), count(distinct driver_id) active
+FROM acceptedrides a join rides r on a.ride_id = r.ride_id
+WHERE year(requested_at) = 2020
+GROUP BY 1
+)t2
+on t1.month = t2.month
