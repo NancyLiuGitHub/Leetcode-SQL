@@ -1,0 +1,26 @@
+window function to rank score desc and asc to remove r=1
+
+SELECT * 
+FROM Student
+WHERE student_id IN (
+  SELECT student_id
+  FROM (
+    SELECT *, 
+      rank() over (partition by exam_id order by score) as lrank,
+      rank() over (partition by exam_id order by score desc) as hrank
+    FROM exam
+  ) t
+  WHERE hrank != 1 and lrank != 1
+)
+
+
+or use join
+
+SELECT s.student_id, s.student_name
+FROM student s join (
+  SELECT *, 
+      rank() over (partition by exam_id order by score) as lrank,
+      rank() over (partition by exam_id order by score desc) as hrank
+  FROM exam
+) t on s.student_id = e.student_id
+WHERE hrank != 1 and lrank != 1
