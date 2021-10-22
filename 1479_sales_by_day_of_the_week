@@ -2,6 +2,7 @@ category, sum(quantity) by day of the week
 
 SELECT item_category,
   if(week(order_date) = 1, sum(quantity),0) as 'Monday',
+  #sum(if(dayofweek(order_date)=2, quantity, 0))
   ...
 FROM items i join orders o on i.item_id = o.item_id
 GROUP BY 1
