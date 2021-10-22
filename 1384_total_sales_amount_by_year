@@ -1,0 +1,42 @@
+2018-2020
+if start year is 2018 and end year is 2018 then total = avg*datediff(end, start)
+if start year is 2018 and end year is 2019 then total = avg*datediff(2018-12-31,start) + avg*datediff(end,2019-01-01)
+if start year is 2018 and end year is 2020 then total = avg*datediff(2018-12-31,start) + avg*365 + avg*datediff(end,2020-01-01)
+same as 2019 and 2020
+
+SELECT product_id,
+  '2018' as year,
+  average_daily_sales*datediff(end, start) as total
+FROM sales
+WHERE year(period_start) = 2018 and year(period_end) = 2018
+union
+SELECT product_id,
+  '2018' as year,
+  average_daily_sales*datediff('2018-12-31', start) as total
+FROM sales
+WHERE year(period_start) = 2018 and year(period_end) > 2018
+union
+SELECT product_id,
+  '2019' as year,
+  average_daily_sales*datediff(end, '2019-01-01') as total
+FROM sales
+WHERE year(period_start) = 2018 and year(period_end) = 2019
+union
+SELECT product_id,
+  '2019' as year,
+  average_daily_sales*365 as total
+FROM sales
+WHERE year(period_start) = 2018 and year(period_end) = 2020
+union
+SELECT product_id,
+  '2019' as year,
+  average_daily_sales*datediff(end, start) as total
+FROM sales
+WHERE year(period_start) = 2019 and year(period_end) = 2019
+union
+SELECT product_id,
+  '2019' as year,
+  average_daily_sales*datediff('2019-12-31', start) as total
+FROM sales
+WHERE year(period_start) = 2019 and year(period_end) > 2019
+.....
