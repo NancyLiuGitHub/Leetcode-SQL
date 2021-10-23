@@ -1,0 +1,7 @@
+user has one activity
+or second most recent activity
+
+SELECT *
+FROM useractivity
+WEHRE username in (select username from useractivity group by username having count(activity) = 1)
+or username in (select username from useractivity order by enddate desc limit 1 offset 1)
