@@ -5,7 +5,7 @@ SELECT *
 FROM useractivity
 WEHRE username in (select username from useractivity group by username having count(activity) = 1)
 union
-SELECT username 
+SELECT *
 FROM (
   SELECT *, rank() over (partition by username ORDER BY enddate desc) as r
   FROM useractivity
