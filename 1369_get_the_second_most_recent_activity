@@ -13,3 +13,11 @@ FROM (
 WHERE r = 2
 
 
+OTHER'S SOLUTION
+select distinct username, activity, startDate, endDate
+from
+    (select u.*,
+           rank() over (partition by username order by startDate desc) as rnk,
+           count(activity) over (partition by username) as num
+    from UserActivity u) t
+where (num <> 1 and rnk = 2) or (num = 1 and rnk = 1)
