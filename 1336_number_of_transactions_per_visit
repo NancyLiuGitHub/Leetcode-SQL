@@ -1,0 +1,10 @@
+1)user, day, transaction count group by user, day
+2)transaction_count,count(user) group by transaction_count
+3)to get 0 transaction use visist left join transaction
+
+SELECT transaction_count, count(distinct user_id) as visits_count
+FROM (
+  SELECT user_id, visit_date, count(transaction_date) as transaction_count
+  FROM visits v left join transactions t on v.user_id = t.user_id and v.vist_date = t.transaction date
+  GROUP BY 1,2 )t
+GROUP BY 1
