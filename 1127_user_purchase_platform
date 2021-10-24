@@ -1,4 +1,4 @@
-SELECT spend_date, platform, count(disctinct user_id), sum(total)
+SELECT spend_date, platform, count(distinct user_id), sum(total)
 FROM (
 SELECT spend_date, user_id, MIN(platform) as platform, sum(amount) as total
 FROM spending
@@ -15,3 +15,17 @@ HAVING COUNT(distinct platform) = 2 ) t2
 GROUP BY 1
 
 ##wrong, should include 0 amount or 0 user count
+1)create a new table with all three types for each day
+with a1 as (
+SELECT distinct spend_date, 'both' as platform 
+FROM spending
+union
+SELECT distinct spend_date, platform
+FROM spending
+)
+
+SELECT a1.spend_date, a1.platform, ifnull(a2.cnt, 0), ifnull(a2.tt, 0)
+FROM a1
+left join a2 (line1:line15)
+on a1.spend_date = a2.spend_date and a1.platform = a2.platform
+
