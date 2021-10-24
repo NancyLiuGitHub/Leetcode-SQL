@@ -13,3 +13,5 @@ FROM spending
 GROUP BY spend_date, user_id
 HAVING COUNT(distinct platform) = 2 ) t2
 GROUP BY 1
+
+##wrong, should include 0 amount or 0 user count
