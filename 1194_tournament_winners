@@ -1,0 +1,20 @@
+dense_rank()
+
+1)create a list of all players with the score
+2)join players and group by group id
+
+with cte as (
+SELECT first_player as player, first_score as score
+from matches
+union
+select second_player as player, second_score as score
+from matches) t,
+cte2 as (
+select group_id, player_id, sum(score) as total
+FROM cte join players p on cte.player=p.player_id
+GROUP BY 1,2)
+
+SELECT player_id
+FROM (SELECT *, dense_rank() over (partition by group_id order by total desc, player_id) as r
+FROM cte2)t
+WHERE r = 1
