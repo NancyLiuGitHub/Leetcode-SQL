@@ -1,0 +1,25 @@
+activiy: *player_id, device_id, *event_date, games_played(can be 0)
+
+fraction: count(return)/count(first logged in), round to 2
+
+1)select palyer_id with 2 consecutive day after first logged in
+
+with cte as (
+select count(distinct a1.player_id) 2day_cnt
+from activity a1 join activity a2 on a1.player_id=a2.player_id and a1.event_date = a2.event_date - 1
+where (a1.player_id, a1.event_date) in (select player_id, min(event_date) from activity group by 1)
+)
+
+2) total player
+with cte2 as (select count(distinct player_id) cnt from activity)
+
+select round(2day_cnt/cnt,2)
+from cte, cte2
+
+
+window function
+select count(distinct player_id) 2day_cnt
+from (
+select *, row_number() over (partition by player_id order by event_date ranges between current_row and interval 1 day following) r
+from activity) t
+where r = 2
