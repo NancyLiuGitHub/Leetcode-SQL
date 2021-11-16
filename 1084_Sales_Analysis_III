@@ -1,3 +1,11 @@
-select product_name
+select distinct product_name
 from product p join sales s on p.product_id = s.product_id
 where sale_date between '...' and '...'
+
+#wrong, doesn't consider product ONLY sold in the date range
+#the output includes product sold in the other date outside the range as well, which we don't want it
+
+select distinct product_name
+from product p join sales s on p.product_id = s.product_id
+group by product_name
+having min(sale_date) between '...' and '...' and max(sale_date) between '...' and '...'
