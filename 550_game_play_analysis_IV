@@ -16,6 +16,10 @@ with cte2 as (select count(distinct player_id) cnt from activity)
 select round(2day_cnt/cnt,2)
 from cte, cte2
 
+#to simplify
+select round(2day_cnt/count(distinct player_id),2)
+from cte, activity
+
 
 window function
 select count(distinct player_id) 2day_cnt
