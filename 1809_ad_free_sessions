@@ -1,0 +1,12 @@
+select session_id
+from playback
+where session_id not in (
+select session_id
+from playback p join ads a on p.customer_id = a.customer_id
+where timestamp between start_time and end_time)
+
+aaa,1,2:00,3:00 3:30
+bbb,1,4:00,5:00 3:30
+aaa,1,2:00,3:00 4:00
+bbb,1,4:00,5:00 4:00
+
