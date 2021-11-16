@@ -1,7 +1,16 @@
 point_2d: x, y
 
 select sqrt(power((a.x-b.x),2) + power((a.y-b.y),2))
-from point_2d, point_2d
+from point_2d a, point_2d b
 where concat(a.x, a.y) != concat(b.x,b.y)
 order by sqrt(power((a.x-b.x),2) + power((a.y-b.y),2))
 limit 1
+
+#correction
+sqrt(,2) -> sqrt()
+power -> pow
+
+#other solution
+select round(sqrt(min(pow(a.x-b.x,2)+pow(a.y-b.y,2))),2)
+from point_2d a join point_2d b
+on a.x != b.x or a.y != b.y
