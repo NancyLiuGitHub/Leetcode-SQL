@@ -1,0 +1,3 @@
+select product_name
+from product p join sales s on p.product_id = s.product_id
+where sale_date between '...' and '...'
