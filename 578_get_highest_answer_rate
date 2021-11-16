@@ -1,0 +1,21 @@
+survey_log: id, action,question_id,answer_id(null, ...), q_num(order), timestamp
+
+which question has the highest answer rate (could be more than one)
+
+1) calculate how many anwers do each question get
+2) calculate total participate for each question
+3) calculate rate
+4) rank the rate
+5) select rank = 1
+
+with cte as (
+  select question_id, sum(case when action = 'answer' then 1 else 0 end)/count(*) ans_rate
+  from survey_log
+  group by 1
+)
+
+select question_id
+from (
+select *, rank() over (order by ans_rate desc) as r
+from cte) t
+where r = 1
