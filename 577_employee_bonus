@@ -1,0 +1,6 @@
+employee: empId, name, supervisor, salary
+bonus: empId, bonus
+
+select empId, bonus
+from employee e left join bonus b on e.empId = b.empId
+where bonus <1000 or bonus is null
