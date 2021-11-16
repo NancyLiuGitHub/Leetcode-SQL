@@ -8,3 +8,15 @@ select
   else id-1 end) new_id,
   student
 from t
+
+#mod(id/2) -> mod(id,2)
+#only if the last id is mod(id,2) = 1, then keep the order, else flip the seat order
+#so a condition should be added -> and mod(id,2) = 1 
+
+#overall
+select 
+  (case when id = (select max(id) from t) and mod(id,2) = 1 then id
+  when mod(id,2) = 1 then id + 1
+  else id-1 end) new_id,
+  student
+from t
