@@ -8,3 +8,24 @@ WHERE (a1.event_date, a1.player_id) in
       (SELECT min(event_date), player_id from activity group by 2)
 GROUP BY 1
 
+player:
+select player_id, min(event_date) install_date
+from activity
+group by 1
+1 3-1
+2 3-2
+3 3-1
+4 3-3
+
+
+retention:
+select player_id return_id
+from activity t1 join cte on t1.player_id = t2.player_id and t1.event_date -1 = cte.insall_date
+
+1
+3
+4
+
+select install_date, count(player_id), round(count(return_id)/count(player_id),2)
+from player p left join retention r on p.player_id = r.return_id
+group by 1
