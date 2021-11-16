@@ -1,0 +1,17 @@
+firendrequest: 
+1,3,3-1
+1,3,3-1
+2,3,3-1
+
+multiple request, multiple accepts
+
+#ifnull(accept/requests,0)
+
+with t1 as (
+select count(*) accept from requestaccepted)
+with t2 as (
+select count(*) request from friendrequest)
+
+select ifnull(round(accept/request,2),0)
+from t1, t2
+
