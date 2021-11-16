@@ -1,0 +1,21 @@
+sum(TIV_2016)
+where TIV_2015 is same
+where log, lag is unique
+
+with cte as (
+select PID
+from insurance
+where TIV_2015 IN (SELECT TIV_2015 from insurance group by 1 having count(*) > 1)
+  and (log,lag) in (select log, lag from insurance group by 1,2 having count(*) = 1)
+)
+
+select round(sum(TIV_2016),2)
+from insurance
+where PID in (select pid from cte)
+
+To simplify
+
+select round(sum(TIV_2016),2)
+from insurance
+where TIV_2015 IN (SELECT TIV_2015 from insurance group by 1 having count(*) > 1)
+  and (log,lag) in (select log, lag from insurance group by 1,2 having count(*) = 1)
