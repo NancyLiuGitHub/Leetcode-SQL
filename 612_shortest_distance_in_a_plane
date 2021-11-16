@@ -1,0 +1,7 @@
+point_2d: x, y
+
+select sqrt(power((a.x-b.x),2) + power((a.y-b.y),2))
+from point_2d, point_2d
+where concat(a.x, a.y) != concat(b.x,b.y)
+order by sqrt(power((a.x-b.x),2) + power((a.y-b.y),2))
+limit 1
