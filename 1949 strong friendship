@@ -15,7 +15,7 @@ FROM friendship
 )
 
 Select f1.user, f2.user, count(f1.friend) as common_friend
-from cte c1 join cte c2 on c1.friend and c2.friend and c1.user<c2.user
-where (c1.user, c2.user) in (select * from friendship)
+from cte c1 join cte c2 on c1.friend = c2.friend (# to find common friend) and c1.user<c2.user (# to remove duplicate)
+where (c1.user, c2.user) in (select * from friendship) -># c1.user is like user1_id, and c2.user is like user2_id from the original friendship table
 group by 1,2
 having count(f1.friend) >= 3
