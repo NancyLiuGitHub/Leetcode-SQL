@@ -6,7 +6,7 @@ having count(employee_id)  = (select max(count(employee_id)) from project group 
 
 #correction
 max & count can't in the same line
-= select max(cnt) from (select count(employee_id) from project group by project_id) t
+= (select max(cnt) from (select count(employee_id) from project group by project_id))
 
 or 
 other solution
