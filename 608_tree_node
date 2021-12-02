@@ -1,0 +1,7 @@
+select id, ‘root’ as type from t where p_id is null
+union all
+select id, ‘inner’ as type 
+	from t1 join t2 on t1.id = t2.p_id
+	where t2.id is not null
+union all
+select id, ‘leaf’ as type from t where id not in (select p_id from t)
