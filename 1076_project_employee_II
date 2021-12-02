@@ -2,3 +2,12 @@ select project_id
 from project 
 group by 1
 having count(employee_id)  = (select max(count(employee_id)) from project group by project_id)
+
+
+#correction
+max & count can't in the same line
+= select max(cnt) from (select count(employee_id) from project group by project_id) t
+
+or 
+other solution
+>= all(select count(employee_id) from project group by project_id
