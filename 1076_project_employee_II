@@ -1,0 +1,4 @@
+select project_id
+from project 
+group by 1
+having count(employee_id)  = (select max(count(employee_id)) from project group by project_id)
