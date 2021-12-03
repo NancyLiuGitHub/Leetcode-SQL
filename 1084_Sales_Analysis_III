@@ -12,3 +12,9 @@ having min(sale_date) between '...' and '...' and max(sale_date) between '...' a
 
 #to simplify
 min(sale_date)>= '..' and max(sale_date) <= '..'
+
+
+#other solution
+SELECT DISTINCT s.product_id, p.product_name
+FROM sales s left join product p on s.product_id = p.product_id
+WHERE s.product_id NOT IN (SELECT product_id FROM sales WHERE sale_date < '2019-01-01' or sales_date > '2019-03-31')
