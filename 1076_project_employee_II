@@ -8,6 +8,9 @@ having count(employee_id)  = (select max(count(employee_id)) from project group 
 max & count can't in the same line
 = (select max(cnt) from (select count(employee_id) from project group by project_id))
 
+or other solution -without max, use limit instead
+= select count(employee_id) cnt from project group by project_id order by cnt desc limit 1)
+
 or 
 other solution
 >= all(select count(employee_id) from project group by project_id
